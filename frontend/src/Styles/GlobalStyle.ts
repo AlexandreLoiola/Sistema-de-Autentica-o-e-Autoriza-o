@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
-export const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
   body {
     box-sizing: border-box;
     outline: 0;
@@ -8,4 +8,11 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     border: 0;
   }
+  .error-message {
+    color: red;
+    font-weight: regular;
+    font-size: 16px;
+  }
 `;
+
+export default GlobalStyle;
