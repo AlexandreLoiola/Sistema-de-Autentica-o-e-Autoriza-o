@@ -23,6 +23,7 @@ const PasswordInput: React.FC<IProps> = ({
   placeHolder,
   message,
   value,
+  style,
   onInputChange,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,13 +37,14 @@ const PasswordInput: React.FC<IProps> = ({
   };
 
   return (
-    <StyledFormGroup className="mb-3" style={{ width: "20%" }}>
+    <StyledFormGroup className="mb-3">
       <StyledFormLabel>{label}</StyledFormLabel>
       <StyledFormControl
         type={showPassword ? "text" : "password"}
         value={value}
         placeholder={placeHolder}
         onChange={handleInputChange}
+        style={style}
       />
       <InputGroup
         style={{

@@ -5,7 +5,7 @@ import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 
 export const StyledFormGroup = styled(Form.Group)`
   margin-bottom: 1.5rem;
-  width: auto;
+  width: 100%;
 `;
 
 export const StyledFormLabel = styled(Form.Label)`
@@ -41,9 +41,10 @@ export const StyledFormControlReadonly = styled(Form.Control)`
 
 export const FormContainer = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: left;
   align-items: center;
-  height: 35vh;
+  width: 100%;
 `;
 
 export const MagnifyingGlassIcon = styled(HiMagnifyingGlass)`
@@ -63,7 +64,7 @@ export const EyeOpenIcon = styled(BsEyeSlashFill)`
   font-weight: 700;
 `;
 
-export const StyledButton = styled(Button)`
+export const StyledFormButton = styled(Button)`
   display: flex;
   width: 280px;
   height: 50px;
@@ -72,14 +73,12 @@ export const StyledButton = styled(Button)`
   padding: 12px 1px;
   font-size: 16px;
   font-weight: 500;
-  margin-top: 40px;
-  background-color: #31a17f;
+  background-color: #6db33f;
   border: none;
   border-radius: 4px;
-  box-shadow: 6px 6px 8px 2px rgba(0, 0, 0, 0.25);
 
   &:hover {
-    background-color: #2c8a6c;
+    background-color: #467025;
     transition: font-size 3s;
   }
 
@@ -104,12 +103,13 @@ export const ButtonSeePass = styled(Button)`
   margin-top: -44px;
 
   &:hover {
-    background-color: #2c8a6c;
+    background: transparent;
     transition: font-size 3s;
+    font-size: 18px;
   }
 
   &:active {
-    box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.6);
+    background-color: transparent;
     transform: translateY(2px);
   }
 `;
