@@ -2,7 +2,14 @@ import React from "react";
 
 import TextForm from "../../Components/Forms/TextForm";
 import { FormContainer, StyledFormButton } from "../../Components/Forms/styles";
-import { Container, ContainerLeft, StyledList, StyledListItem, StyledSubTitle, StyledTitle } from "./styles";
+import {
+  Container,
+  ContainerLeft,
+  StyledListItem,
+  StyledSubTitle,
+  StyledTitle,
+  StyledList,
+} from "./styles";
 
 const RecoverPass: React.FC = () => {
   return (

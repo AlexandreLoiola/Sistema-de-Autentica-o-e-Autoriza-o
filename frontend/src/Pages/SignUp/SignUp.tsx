@@ -11,12 +11,12 @@ import TextForm from "../../Components/Forms/TextForm";
 import { FormContainer, StyledFormButton } from "../../Components/Forms/styles";
 import CheckboxForm from "../../Components/Forms/CheckboxForm";
 
-const Login: React.FC = () => {
+const SignUp: React.FC = () => {
   return (
     <Container>
       <ContainerLeft>
-        <StyledTitle>Login</StyledTitle>
-        <FormContainer>
+        <StyledTitle>Cadastro</StyledTitle>
+        <FormContainer style={{}}>
           <TextForm
             label={"Usuário"}
             placeHolder={""}
@@ -27,6 +27,14 @@ const Login: React.FC = () => {
           />
           <PasswordInput
             label={"Senha"}
+            placeHolder={""}
+            message={""}
+            onInputChange={function (value: string): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
+          <PasswordInput
+            label={"Confirmar Senha"}
             placeHolder={""}
             message={""}
             onInputChange={function (value: string): void {
@@ -44,13 +52,12 @@ const Login: React.FC = () => {
             }}
           >
             <CheckboxForm
-              label={"Lembrar-me"}
+              label={"Li e aceito os termos e condições"}
               message={""}
               onInputChange={function (value: string): void {
                 throw new Error("Function not implemented.");
               }}
             />
-            <StyledLink to="/forgot-password">Esqueceu a senha?</StyledLink>
           </div>
           <div
             style={{
@@ -60,8 +67,8 @@ const Login: React.FC = () => {
               marginBottom: "6vh",
             }}
           ></div>
-          <span >
-            Não possui conta? <StyledLink to="/signup">Clique aqui</StyledLink>
+          <span>
+            Já possui conta? <StyledLink to="/signin">Clique aqui</StyledLink>
           </span>
         </FormContainer>
       </ContainerLeft>
@@ -69,4 +76,4 @@ const Login: React.FC = () => {
     </Container>
   );
 };
-export default Login;
+export default SignUp;
