@@ -2,7 +2,6 @@ import React from "react";
 import {
   Container,
   ContainerLeft,
-  ContainerRight,
   StyledLink,
   StyledTitle,
 } from "./styles";
@@ -10,6 +9,7 @@ import PasswordInput from "../../Components/Forms/PasswordForm";
 import TextForm from "../../Components/Forms/TextForm";
 import { FormContainer, StyledFormButton } from "../../Components/Forms/styles";
 import CheckboxForm from "../../Components/Forms/CheckboxForm";
+import ShieldContainer from "../../Components/ShieldContainer/ShieldContainer";
 
 const SignUp: React.FC = () => {
   return (
@@ -72,7 +72,7 @@ const SignUp: React.FC = () => {
           </span>
         </FormContainer>
       </ContainerLeft>
-      <ContainerRight />
+      <ShieldContainer />
     </Container>
   );
 };

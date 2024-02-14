@@ -2,11 +2,11 @@ import React from "react";
 import {
   Container,
   ContainerLeft,
-  ContainerRight,
   StyledTitle,
 } from "./styles";
 import { FormContainer, StyledFormButton } from "../../Components/Forms/styles";
 import PasswordInput from "../../Components/Forms/PasswordForm";
+import ShieldContainer from "../../Components/ShieldContainer/ShieldContainer";
 
 const AlterPassword: React.FC = () => {
   return (
@@ -35,7 +35,7 @@ const AlterPassword: React.FC = () => {
           </StyledFormButton>
         </FormContainer>
       </ContainerLeft>
-      <ContainerRight />
+      <ShieldContainer />
     </Container>
   );
 };
