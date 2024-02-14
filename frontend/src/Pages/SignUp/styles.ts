@@ -15,14 +15,6 @@ export const ContainerLeft = styled.div`
   padding: 50px 150px 0px 150px;
 `;
 
-export const ContainerRight = styled.div`
-  background-color: #000;
-  width: 50vw;
-  height: 100vh;
-  position: absolute;
-  right: 0;
-`;
-
 export const StyledTitle = styled.h1`
   font-size: 42px;
   font-weight: bold;
