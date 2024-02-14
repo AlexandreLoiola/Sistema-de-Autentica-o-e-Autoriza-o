@@ -7,6 +7,7 @@ import {
 import { FormContainer, StyledFormButton } from "../../Components/Forms/styles";
 import PasswordInput from "../../Components/Forms/PasswordForm";
 import ShieldContainer from "../../Components/ShieldContainer/ShieldContainer";
+import Footer from "../../Components/Footer/Footer";
 
 const AlterPassword: React.FC = () => {
   return (
@@ -36,6 +37,7 @@ const AlterPassword: React.FC = () => {
         </FormContainer>
       </ContainerLeft>
       <ShieldContainer />
+      <Footer />
     </Container>
   );
 };

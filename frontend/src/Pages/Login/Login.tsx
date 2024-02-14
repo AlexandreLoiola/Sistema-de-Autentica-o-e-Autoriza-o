@@ -1,15 +1,11 @@
 import React from "react";
-import {
-  Container,
-  ContainerLeft,
-  StyledLink,
-  StyledTitle,
-} from "./styles";
+import { Container, ContainerLeft, StyledLink, StyledTitle } from "./styles";
 import PasswordInput from "../../Components/Forms/PasswordForm";
 import TextForm from "../../Components/Forms/TextForm";
 import { FormContainer, StyledFormButton } from "../../Components/Forms/styles";
 import CheckboxForm from "../../Components/Forms/CheckboxForm";
 import ShieldContainer from "../../Components/ShieldContainer/ShieldContainer";
+import Footer from "../../Components/Footer/Footer";
 
 const Login: React.FC = () => {
   return (
@@ -66,6 +62,7 @@ const Login: React.FC = () => {
         </FormContainer>
       </ContainerLeft>
       <ShieldContainer />
+      <Footer />
     </Container>
   );
 };

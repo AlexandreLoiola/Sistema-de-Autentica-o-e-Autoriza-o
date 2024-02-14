@@ -11,6 +11,7 @@ import {
   StyledList,
 } from "./styles";
 import ShieldContainer from "../../Components/ShieldContainer/ShieldContainer";
+import Footer from "../../Components/Footer/Footer";
 
 const RecoverPass: React.FC = () => {
   return (
@@ -46,6 +47,7 @@ const RecoverPass: React.FC = () => {
         </FormContainer>
       </ContainerLeft>
       <ShieldContainer />
+      <Footer />
     </Container>
   );
 };
