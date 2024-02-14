@@ -1,25 +1,18 @@
 import React from "react";
-import {
-  Container,
-  ContainerLeft,
-  ContainerRight,
-  StyledList,
-  StyledListItem,
-  StyledSubTitle,
-  StyledTitle,
-} from "./styles";
+
 import TextForm from "../../Components/Forms/TextForm";
 import { FormContainer, StyledFormButton } from "../../Components/Forms/styles";
+import { Container, ContainerLeft, StyledList, StyledListItem, StyledSubTitle, StyledTitle } from "./styles";
 
 const RecoverPass: React.FC = () => {
   return (
     <Container>
       <ContainerLeft>
-        <StyledTitle>Recuperar Senha</StyledTitle>
+        <StyledTitle>Redefinir Senha</StyledTitle>
+        <StyledSubTitle>
+          Siga os seguintes passos para recuperar sua senha:
+        </StyledSubTitle>
         <StyledList>
-          <StyledSubTitle>
-            Siga os seguintes passos para recuperar sua senha:
-          </StyledSubTitle>
           <StyledListItem>
             1. Informe seu nome de usuário ou e-mail;
           </StyledListItem>
