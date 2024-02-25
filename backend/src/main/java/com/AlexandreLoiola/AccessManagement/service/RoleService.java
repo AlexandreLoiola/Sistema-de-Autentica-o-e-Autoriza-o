@@ -33,14 +33,14 @@ public class RoleService {
     public RoleModel findRoleModelByDescription(String description) {
         return roleRepository.findByDescriptionAndIsActiveTrue(description)
                 .orElseThrow(() -> new RoleNotFoundException(
-                        String.format("The user role ‘%s’ was not found", description)
+                        String.format("The role ‘%s’ was not found", description)
                 ));
     }
 
     public List<RoleDto> getAllRoleDto() {
         List<RoleModel> roleModelList = roleRepository.findByIsActiveTrue();
         if (roleModelList.isEmpty()) {
-            throw new RoleNotFoundException("No active user role was found");
+            throw new RoleNotFoundException("No active role was found");
         }
         return convertModelListToDtoList(roleModelList);
     }
@@ -49,7 +49,7 @@ public class RoleService {
     public RoleDto insertRole(RoleForm roleForm) {
         if (roleRepository.findByDescription(roleForm.getDescription()).isPresent()) {
             throw new RoleInsertException(
-                    String.format("The user role ‘%s’ is already registered", roleForm.getDescription())
+                    String.format("The role ‘%s’ is already registered", roleForm.getDescription())
             );
         }
         try {
@@ -62,7 +62,7 @@ public class RoleService {
             roleRepository.save(roleModel);
             return convertModelToDto(roleModel);
         } catch (DataIntegrityViolationException err) {
-            throw new RoleInsertException(String.format("Failed to register the user role ‘%s’. Check if the data is correct", roleForm.getDescription()));
+            throw new RoleInsertException(String.format("Failed to register the role ‘%s’. Check if the data is correct", roleForm.getDescription()));
         }
     }
 
@@ -75,7 +75,7 @@ public class RoleService {
             roleRepository.save(roleModel);
             return convertModelToDto(roleModel);
         } catch (DataIntegrityViolationException err) {
-            throw new RoleUpdateException(String.format("Failed to update the user role ‘%s’. Check if the data is correct", description));
+            throw new RoleUpdateException(String.format("Failed to update the role ‘%s’. Check if the data is correct", description));
         }
     }
 
@@ -87,7 +87,7 @@ public class RoleService {
             roleModel.setUpdatedAt(new Date());
             roleRepository.save(roleModel);
         } catch (DataIntegrityViolationException err) {
-            throw new RoleUpdateException(String.format("Failed to update the user role ‘%s’. Check if the data is correct", description));
+            throw new RoleUpdateException(String.format("Failed to update the role ‘%s’. Check if the data is correct", description));
         }
     }
 
