@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MethodForm {
-    @NotNull(message = "O campo descrição não pode estar vazio")
-    @NotBlank(message = "O campo descrição não pode ficar em branco.")
-    @Size(min = 3, max = 100, message = "A descrição do papel de usuário deve ter entre 3 e 100 caracteres.")
+    @NotNull(message = "The description field cannot be empty")
+    @NotBlank(message = "The description field cannot be blank.")
+    @Size(min = 3, max = 100, message = "The user role description must be between 3 and 100 characters.")
     private String description;
 }
