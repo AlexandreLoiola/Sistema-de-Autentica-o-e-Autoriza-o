@@ -17,7 +17,7 @@ public class AuthorizationModel {
     @Column(columnDefinition="uuid")
     private UUID id;
 
-    @Column(name = "description", nullable = false, unique = true)
+    @Column(name = "description", length = 100, nullable = false, unique = true)
     private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,6 +31,7 @@ public class AuthorizationModel {
     @Column(name = "isActive", nullable = false)
     private Boolean isActive;
 
+    @Version
     @Column(name = "version", nullable = false)
     private String version;
 }
