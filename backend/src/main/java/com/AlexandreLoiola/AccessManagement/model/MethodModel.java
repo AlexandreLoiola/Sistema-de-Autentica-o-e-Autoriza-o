@@ -5,6 +5,8 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -33,5 +35,8 @@ public class MethodModel {
 
     @Version
     @Column(name = "version", nullable = false)
-    private String version;
+    private long version;
+
+    @ManyToMany(mappedBy = "methods")
+    private Set<AuthorizationModel> authorizations = new HashSet<>();
 }

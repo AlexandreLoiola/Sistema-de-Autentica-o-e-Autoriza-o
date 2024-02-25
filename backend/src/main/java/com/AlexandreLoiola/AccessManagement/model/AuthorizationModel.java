@@ -5,6 +5,8 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -33,5 +35,16 @@ public class AuthorizationModel {
 
     @Version
     @Column(name = "version", nullable = false)
-    private String version;
+    private long version;
+
+    @ManyToMany
+    @JoinTable(
+            name="TB_AUTHORIZATION_METHOD",
+            joinColumns = {@JoinColumn(name = "id_authorization", referencedColumnName = "id")},
+            inverseJoinColumns = @JoinColumn(name = "id_method")
+    )
+    private Set<MethodModel> methods = new HashSet<>();
+
+    @ManyToMany(mappedBy = "authorizations")
+    private Set<RoleModel> roles = new HashSet<>();
 }

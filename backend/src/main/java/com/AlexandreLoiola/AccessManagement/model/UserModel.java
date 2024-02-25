@@ -5,6 +5,8 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -17,8 +19,14 @@ public class UserModel {
     @Column(columnDefinition="uuid")
     private UUID id;
 
-    @Column(name = "description", length = 100, nullable = false, unique = true)
-    private String description;
+    @Column(name = "nickname", length = 100, nullable = false, unique = true)
+    private String nickname;
+
+    @Column(name = "email", length = 100, nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
@@ -33,5 +41,13 @@ public class UserModel {
 
     @Version
     @Column(name = "version", nullable = false)
-    private String version;
+    private long version;
+
+    @ManyToMany
+    @JoinTable(
+            name="TB_USER_ROLE",
+            joinColumns = {@JoinColumn(name = "id_user", referencedColumnName = "id")},
+            inverseJoinColumns = @JoinColumn(name = "id_role")
+    )
+    private Set<RoleModel> roles = new HashSet<>();
 }

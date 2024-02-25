@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -33,5 +35,16 @@ public class RoleModel {
 
     @Version
     @Column(name = "version", nullable = false)
-    private String version;
+    private long version;
+
+    @ManyToMany
+    @JoinTable(
+            name="TB_ROLE_AUTHORIZATION",
+            joinColumns = {@JoinColumn(name = "id_role", referencedColumnName = "id")},
+            inverseJoinColumns = @JoinColumn(name = "id_authorization")
+    )
+    private Set<AuthorizationModel> authorizations = new HashSet<>();
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<UserModel> users = new HashSet<>();
 }
