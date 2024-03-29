@@ -58,7 +58,7 @@ public class UserService {
             userModel.setCreatedAt(date);
             userModel.setUpdatedAt(date);
             userModel.setIsActive(true);
-            userModel.setVersion("1.0.0");
+            userModel.setVersion(1);
             userRepository.save(userModel);
             return convertModelToDto(userModel);
         } catch (DataIntegrityViolationException err) {

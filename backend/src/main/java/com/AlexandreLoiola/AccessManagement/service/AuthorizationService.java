@@ -58,7 +58,7 @@ public class AuthorizationService {
             authorizationModel.setCreatedAt(date);
             authorizationModel.setUpdatedAt(date);
             authorizationModel.setIsActive(true);
-            authorizationModel.setVersion("1.0.0");
+            authorizationModel.setVersion(1);
             authorizationRepository.save(authorizationModel);
             return convertModelToDto(authorizationModel);
         } catch (DataIntegrityViolationException err) {

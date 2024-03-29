@@ -1,6 +1,8 @@
 package com.AlexandreLoiola.AccessManagement.service.exceptions.role;
 
-public class RoleUpdateException extends RuntimeException {
+import org.springframework.dao.DataIntegrityViolationException;
+
+public class RoleUpdateException extends DataIntegrityViolationException {
     private static final long serialVersionUID = 1L;
 
     public RoleUpdateException(String msg) { super(msg); }

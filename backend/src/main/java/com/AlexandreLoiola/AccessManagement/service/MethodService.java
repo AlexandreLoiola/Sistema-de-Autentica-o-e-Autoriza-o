@@ -58,7 +58,7 @@ public class MethodService {
             methodModel.setCreatedAt(date);
             methodModel.setUpdatedAt(date);
             methodModel.setIsActive(true);
-            methodModel.setVersion("1.0.0");
+            methodModel.setVersion(1);
             methodRepository.save(methodModel);
             return convertModelToDto(methodModel);
         } catch (DataIntegrityViolationException err) {

@@ -1,9 +1,16 @@
 package com.AlexandreLoiola.AccessManagement.service.exceptions.authorization;
 
-public class AuthorizationNotFoundException extends RuntimeException {
+import jakarta.persistence.EntityNotFoundException;
+
+public class AuthorizationNotFoundException extends EntityNotFoundException {
     private static final long serialVersionUID = 1L;
 
-    public AuthorizationNotFoundException(String msg) { super(msg); }
+    public AuthorizationNotFoundException(String msg) {
+        super(msg);
+    }
 
-    public AuthorizationNotFoundException(String msg, Throwable cause) {super(msg, cause);}
+    public AuthorizationNotFoundException(String msg, Throwable cause) {
+        super(msg);
+        this.initCause(cause);
+    }
 }

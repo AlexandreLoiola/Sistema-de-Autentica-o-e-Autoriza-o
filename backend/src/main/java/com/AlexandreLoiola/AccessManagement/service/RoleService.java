@@ -58,7 +58,7 @@ public class RoleService {
             roleModel.setCreatedAt(date);
             roleModel.setUpdatedAt(date);
             roleModel.setIsActive(true);
-            roleModel.setVersion("1.0.0");
+            roleModel.setVersion(1);
             roleRepository.save(roleModel);
             return convertModelToDto(roleModel);
         } catch (DataIntegrityViolationException err) {

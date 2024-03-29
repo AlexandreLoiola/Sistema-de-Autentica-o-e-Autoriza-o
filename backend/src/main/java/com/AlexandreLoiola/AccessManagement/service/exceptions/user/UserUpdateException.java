@@ -1,6 +1,8 @@
 package com.AlexandreLoiola.AccessManagement.service.exceptions.user;
 
-public class UserUpdateException extends RuntimeException {
+import org.springframework.dao.DataIntegrityViolationException;
+
+public class UserUpdateException extends DataIntegrityViolationException {
     private static final long serialVersionUID = 1L;
 
     public UserUpdateException(String msg) { super(msg); }

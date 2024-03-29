@@ -1,6 +1,8 @@
 package com.AlexandreLoiola.AccessManagement.service.exceptions.authorization;
 
-public class AuthorizationInsertException extends RuntimeException {
+import org.springframework.dao.DataIntegrityViolationException;
+
+public class AuthorizationInsertException extends DataIntegrityViolationException {
     private static final long serialVersionUID = 1L;
 
     public AuthorizationInsertException(String msg) { super(msg); }
