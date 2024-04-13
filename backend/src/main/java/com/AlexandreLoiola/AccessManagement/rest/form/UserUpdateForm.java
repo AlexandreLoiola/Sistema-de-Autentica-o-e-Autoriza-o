@@ -1,5 +1,7 @@
 package com.AlexandreLoiola.AccessManagement.rest.form;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -7,12 +9,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserUpdateForm {
-    @NotNull(message = "O campo descrição não pode estar vazio")
-    @NotBlank(message = "O campo descrição não pode ficar em branco.")
-    @Size(min = 3, max = 100, message = "A descrição do papel de usuário deve ter entre 3 e 100 caracteres.")
-    private String description;
+    @NotNull(message = "The description field cannot be empty")
+    @NotBlank(message = "The description field cannot be blank.")
+    @Size(min = 3, max = 100, message = "The description must be between 3 and 100 characters.")
+    @Email(message = "The email must be a valid email address.")
+    private String email;
+
+    @NotNull(message = "The username field cannot be empty")
+    @NotBlank(message = "The username field cannot be blank.")
+    @Size(min = 3, max = 100, message = "The username must be between 3 and 100 characters.")
+    private String username;
+
+    private Set<RoleForm> roles;
 }

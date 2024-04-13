@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class MethodUpdateForm {
     @NotNull(message = "The description field cannot be empty")
     @NotBlank(message = "The description field cannot be blank.")
-    @Size(min = 3, max = 100, message = "The user role description must be between 3 and 100 characters.")
+    @Size(min = 3, max = 100, message = "The description must be between 3 and 100 characters.")
     private String description;
 }
