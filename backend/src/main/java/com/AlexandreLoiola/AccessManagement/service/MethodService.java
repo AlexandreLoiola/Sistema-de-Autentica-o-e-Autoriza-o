@@ -1,5 +1,6 @@
 package com.AlexandreLoiola.AccessManagement.service;
 
+import com.AlexandreLoiola.AccessManagement.mapper.MethodMapper;
 import com.AlexandreLoiola.AccessManagement.model.MethodModel;
 import com.AlexandreLoiola.AccessManagement.repository.MethodRepository;
 import com.AlexandreLoiola.AccessManagement.rest.dto.MethodDto;
@@ -12,22 +13,25 @@ import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class MethodService {
 
+    private final MethodMapper methodMapper;
     private final MethodRepository methodRepository;
 
-    public MethodService(MethodRepository methodRepository) {
+    public MethodService(MethodRepository methodRepository, MethodMapper methodMapper) {
         this.methodRepository = methodRepository;
+        this.methodMapper = methodMapper;
     }
 
     public MethodDto getMethodDtoByDescription(String description) {
         MethodModel methodModel = findMethodModelByDescription(description);
-        return convertModelToDto(methodModel);
+        return MethodMapper.INSTANCE.modelToDto(methodModel);
     }
 
     public MethodModel findMethodModelByDescription(String description) {
@@ -37,12 +41,12 @@ public class MethodService {
                 ));
     }
 
-    public List<MethodDto> getAllMethodDto() {
-        List<MethodModel> methodModelList = methodRepository.findByIsActiveTrue();
-        if (methodModelList.isEmpty()) {
+    public Set<MethodDto> getAllMethodDto() {
+        Set<MethodModel> methodModelSet = methodRepository.findByIsActiveTrue();
+        if (methodModelSet.isEmpty()) {
             throw new MethodNotFoundException("No active user method was found");
         }
-        return convertModelListToDtoList(methodModelList);
+        return MethodMapper.INSTANCE.setModelToSetDto(methodModelSet);
     }
 
     @Transactional
@@ -53,14 +57,14 @@ public class MethodService {
             );
         }
         try {
-            MethodModel methodModel = convertFormToModel(methodForm);
+            MethodModel methodModel = MethodMapper.INSTANCE.formToModel(methodForm);
             Date date = new Date();
             methodModel.setCreatedAt(date);
             methodModel.setUpdatedAt(date);
             methodModel.setIsActive(true);
             methodModel.setVersion(1);
             methodRepository.save(methodModel);
-            return convertModelToDto(methodModel);
+            return MethodMapper.INSTANCE.modelToDto(methodModel);
         } catch (DataIntegrityViolationException err) {
             throw new MethodInsertException(String.format("Failed to register the method ‘%s’. Check if the data is correct", methodForm.getDescription()));
         }
@@ -73,7 +77,7 @@ public class MethodService {
             methodModel.setDescription(methodUpdateForm.getDescription());
             methodModel.setUpdatedAt(new Date());
             methodRepository.save(methodModel);
-            return convertModelToDto(methodModel);
+            return MethodMapper.INSTANCE.modelToDto(methodModel);
         } catch (DataIntegrityViolationException err) {
             throw new MethodUpdateException(String.format("Failed to update the user method ‘%s’. Check if the data is correct", description));
         }
@@ -89,26 +93,5 @@ public class MethodService {
         } catch (DataIntegrityViolationException err) {
             throw new MethodUpdateException(String.format("Failed to update the user method ‘%s’. Check if the data is correct", description));
         }
-    }
-
-    private MethodDto convertModelToDto(MethodModel methodModel) {
-        MethodDto methodDto = new MethodDto();
-        methodDto.setDescription(methodModel.getDescription());
-        return methodDto;
-    }
-
-    private List<MethodDto> convertModelListToDtoList(List<MethodModel> list) {
-        List<MethodDto> methodDtoList = new ArrayList<>();
-        for (MethodModel methodModel : list) {
-            MethodDto methodDto = convertModelToDto(methodModel);
-            methodDtoList.add(methodDto);
-        }
-        return methodDtoList;
-    }
-
-    private MethodModel convertFormToModel(MethodForm methodForm) {
-        MethodModel methodModel = new MethodModel();
-        methodModel.setDescription(methodForm.getDescription());
-        return methodModel;
     }
 }

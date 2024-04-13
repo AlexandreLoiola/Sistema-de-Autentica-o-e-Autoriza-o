@@ -1,7 +1,11 @@
 package com.AlexandreLoiola.AccessManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
@@ -37,6 +41,20 @@ public class MethodModel {
     @Column(name = "version", nullable = false)
     private long version;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "methods")
     private Set<AuthorizationModel> authorizations = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MethodModel)) return false;
+        MethodModel that = (MethodModel) o;
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }
