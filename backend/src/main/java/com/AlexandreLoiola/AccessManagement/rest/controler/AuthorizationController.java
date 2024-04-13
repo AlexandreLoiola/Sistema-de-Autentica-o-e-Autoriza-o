@@ -1,5 +1,6 @@
 package com.AlexandreLoiola.AccessManagement.rest.controler;
 
+import com.AlexandreLoiola.AccessManagement.model.AuthorizationModel;
 import com.AlexandreLoiola.AccessManagement.rest.dto.AuthorizationDto;
 import com.AlexandreLoiola.AccessManagement.rest.form.AuthorizationForm;
 import com.AlexandreLoiola.AccessManagement.rest.form.AuthorizationUpdateForm;
@@ -9,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+import java.util.Set;
 
 @RestController
 @RequestMapping("/authorizations")
@@ -19,9 +19,9 @@ public class AuthorizationController {
     private AuthorizationService authorizationService;
 
     @GetMapping
-    public ResponseEntity<List<AuthorizationDto>> getAllAuthorization() {
-        List<AuthorizationDto> authorizationDtoList = authorizationService.getAllAuthorizationDto();
-        return ResponseEntity.ok().body(authorizationDtoList);
+    public ResponseEntity<Set<AuthorizationDto>> getAllAuthorization() {
+        Set<AuthorizationDto> authorizationDtoSet = authorizationService.getAllAuthorizationDto();
+        return ResponseEntity.ok().body(authorizationDtoSet);
     }
 
     @GetMapping("/{description}")
