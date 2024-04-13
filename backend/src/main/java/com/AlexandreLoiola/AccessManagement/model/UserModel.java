@@ -1,5 +1,6 @@
 package com.AlexandreLoiola.AccessManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -19,8 +20,8 @@ public class UserModel {
     @Column(columnDefinition="uuid")
     private UUID id;
 
-    @Column(name = "nickname", length = 100, nullable = false, unique = true)
-    private String nickname;
+    @Column(name = "username", length = 100, nullable = false, unique = true)
+    private String username;
 
     @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
@@ -43,6 +44,7 @@ public class UserModel {
     @Column(name = "version", nullable = false)
     private long version;
 
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(
             name="TB_USER_ROLE",
@@ -50,4 +52,17 @@ public class UserModel {
             inverseJoinColumns = @JoinColumn(name = "id_role")
     )
     private Set<RoleModel> roles = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserModel)) return false;
+        UserModel that = (UserModel) o;
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }
