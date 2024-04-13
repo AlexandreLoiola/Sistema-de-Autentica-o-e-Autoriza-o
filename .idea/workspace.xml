@@ -1,7 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="1715ce45-62f6-4288-a166-e8010f2fa0eb" name="Changes" comment="" />
+    <list default="true" id="1715ce45-62f6-4288-a166-e8010f2fa0eb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/model/AuthorizationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/model/AuthorizationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/model/MethodModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/model/MethodModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/model/RoleModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/model/RoleModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/model/UserModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/model/UserModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/repository/AuthorizationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/repository/AuthorizationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/repository/MethodRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/repository/MethodRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/repository/RoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/repository/RoleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/controler/AuthorizationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/controler/AuthorizationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/controler/MethodController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/controler/MethodController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/controler/RoleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/controler/RoleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/controler/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/controler/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/dto/AuthorizationDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/dto/AuthorizationDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/dto/RoleDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/dto/RoleDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/dto/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/dto/UserDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/AuthorizationForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/AuthorizationForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/AuthorizationUpdateForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/AuthorizationUpdateForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/RoleForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/RoleForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/RoleUpdateForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/RoleUpdateForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/UserForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/UserForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/UserUpdateForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/rest/form/UserUpdateForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/service/AuthorizationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/service/AuthorizationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/service/MethodService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/service/MethodService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/service/RoleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/service/RoleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/AlexandreLoiola/AccessManagement/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/AlexandreLoiola/Access/Management/service/RoleServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/test/java/com/AlexandreLoiola/Access/Management/service/RoleServiceTest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,9 +47,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2c9b4f6lfPTUbpQ71DiW2Ms6uzV" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -26,10 +60,22 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/alexa/Desktop/Programas/1Portfolio/Sistema_de_Autenticacao_e_Autorizacao/backend",
-    "mysql-explain.agentPath": "C:\\Users\\alexa\\AppData\\Roaming\\JetBrains\\IdeaIC2023.3\\plugins\\mysql-explain-intellij-plugin\\lib\\mysql-explain-agent-1.1.1-with-dependencies.jar"
+    "last_opened_file_path": "C:/Users/alexa/Desktop/Programas/1Portfolio/MenuRbac",
+    "mysql-explain.agentPath": "C:\\Users\\alexa\\AppData\\Roaming\\JetBrains\\IdeaIC2023.3\\plugins\\mysql-explain-intellij-plugin\\lib\\mysql-explain-agent-1.1.1-with-dependencies.jar",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-18.0.2-corretto-18.0.2-4caba194b151-5720f15e" />
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
