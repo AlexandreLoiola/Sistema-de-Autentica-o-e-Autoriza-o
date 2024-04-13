@@ -1,16 +1,12 @@
 package com.AlexandreLoiola.AccessManagement.rest.controler.exceptions;
 
-
-import com.AlexandreLoiola.AccessManagement.service.exceptions.authorization.AuthorizationNotFoundException;
-import com.AlexandreLoiola.AccessManagement.service.exceptions.role.RoleInsertException;
-import com.AlexandreLoiola.AccessManagement.service.exceptions.role.RoleNotFoundException;
-import com.AlexandreLoiola.AccessManagement.service.exceptions.role.RoleUpdateException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -67,4 +63,17 @@ public class ControllerExceptionHandler {
                 request.getRequestURI());
         return new ResponseEntity<>(exceptionsDto, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ExceptionsDto> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+        String errorMsg = ex.getMessage();
+        ExceptionsDto exceptionsDto = new ExceptionsDto(
+                System.currentTimeMillis(),
+                HttpStatus.METHOD_NOT_ALLOWED.value(),
+                "Method Not Allowed",
+                errorMsg,
+                request.getRequestURI());
+        return new ResponseEntity<>(exceptionsDto, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
 }
