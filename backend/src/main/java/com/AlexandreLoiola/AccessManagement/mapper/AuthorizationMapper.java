@@ -16,8 +16,6 @@ public abstract class AuthorizationMapper {
 
     public abstract AuthorizationDto modelToDto(AuthorizationModel model);
     @InheritInverseConfiguration
-    public abstract AuthorizationModel dtoToModel(AuthorizationDto dto);
     public abstract AuthorizationModel formToModel(AuthorizationForm form);
-    public abstract AuthorizationForm modelToForm(AuthorizationModel model);
     public abstract Set<AuthorizationDto> setModelToSetDto(Set<AuthorizationModel> models);
 }

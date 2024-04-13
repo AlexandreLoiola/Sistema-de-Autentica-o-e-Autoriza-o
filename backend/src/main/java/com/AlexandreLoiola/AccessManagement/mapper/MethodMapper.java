@@ -14,8 +14,6 @@ public abstract class MethodMapper {
     public static final MethodMapper INSTANCE = Mappers.getMapper(MethodMapper.class);
 
     public abstract MethodDto modelToDto(MethodModel model);
-    public abstract MethodModel dtoToModel(MethodDto dto);
     public abstract MethodModel formToModel(MethodForm form);
-    public abstract MethodForm modelToForm(MethodModel model);
     public abstract Set<MethodDto> setModelToSetDto(Set<MethodModel> models);
 }
