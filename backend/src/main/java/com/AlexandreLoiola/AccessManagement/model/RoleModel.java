@@ -1,5 +1,7 @@
 package com.AlexandreLoiola.AccessManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -37,6 +39,7 @@ public class RoleModel {
     @Column(name = "version", nullable = false)
     private long version;
 
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(
             name="TB_ROLE_AUTHORIZATION",
@@ -45,6 +48,20 @@ public class RoleModel {
     )
     private Set<AuthorizationModel> authorizations = new HashSet<>();
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "roles")
     private Set<UserModel> users = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RoleModel)) return false;
+        RoleModel that = (RoleModel) o;
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

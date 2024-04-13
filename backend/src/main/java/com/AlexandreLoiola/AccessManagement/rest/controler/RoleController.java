@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -21,9 +21,9 @@ public class RoleController {
     private RoleService roleService;
 
     @GetMapping
-    public ResponseEntity<List<RoleDto>> getAllRole() {
-        List<RoleDto> roleDtoList = roleService.getAllRoleDto();
-        return ResponseEntity.ok().body(roleDtoList);
+    public ResponseEntity<Set<RoleDto>> getAllRole() {
+        Set<RoleDto> roleDtoSet = roleService.getAllRoleDto();
+        return ResponseEntity.ok().body(roleDtoSet);
     }
 
     @GetMapping("/{description}")
