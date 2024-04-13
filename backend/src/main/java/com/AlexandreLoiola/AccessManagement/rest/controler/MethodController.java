@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -19,9 +19,9 @@ public class MethodController {
     private MethodService methodService;
 
     @GetMapping
-    public ResponseEntity<List<MethodDto>> getAllMethod() {
-        List<MethodDto> methodDtoList = methodService.getAllMethodDto();
-        return ResponseEntity.ok().body(methodDtoList);
+    public ResponseEntity<Set<MethodDto>> getAllMethod() {
+        Set<MethodDto> methodDtoSet = methodService.getAllMethodDto();
+        return ResponseEntity.ok().body(methodDtoSet);
     }
 
     @GetMapping("/{description}")
