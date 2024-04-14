@@ -51,7 +51,7 @@ public class MethodService {
 
     @Transactional
     public MethodDto insertMethod(MethodForm methodForm) {
-        if (methodRepository.findByDescription(methodForm.getDescription()).isPresent()) {
+        if (methodRepository.findByDescriptionAndIsActiveTrue(methodForm.getDescription()).isPresent()) {
             throw new MethodInsertException(
                     String.format("The user method ‘%s’ is already registered", methodForm.getDescription())
             );
