@@ -3,6 +3,7 @@ package com.AlexandreLoiola.AccessManagement.rest.controler;
 
 import com.AlexandreLoiola.AccessManagement.rest.dto.UserDto;
 import com.AlexandreLoiola.AccessManagement.rest.form.UserCreateForm;
+import com.AlexandreLoiola.AccessManagement.rest.form.UserLoginForm;
 import com.AlexandreLoiola.AccessManagement.rest.form.UserUpdateForm;
 import com.AlexandreLoiola.AccessManagement.service.UserService;
 import jakarta.validation.Valid;
@@ -23,6 +24,14 @@ public class UserController {
     public ResponseEntity<Set<UserDto>> getAllUser() {
         Set<UserDto> userDtoSet = userService.getAllUserDto();
         return ResponseEntity.ok().body(userDtoSet);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserDto> userLogin(
+            @Valid @RequestBody UserLoginForm userForm
+    ) {
+        UserDto userDto = userService.login(userForm);
+        return ResponseEntity.ok().body(userDto);
     }
 
     @GetMapping("/{description}")

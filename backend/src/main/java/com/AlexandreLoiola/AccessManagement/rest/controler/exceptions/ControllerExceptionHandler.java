@@ -6,12 +6,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
@@ -76,4 +75,15 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(exceptionsDto, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ExceptionsDto> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
+        String errorMsg = ex.getMessage();
+        ExceptionsDto exceptionsDto = new ExceptionsDto(
+                System.currentTimeMillis(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "Authentication Failed",
+                errorMsg,
+                request.getRequestURI());
+        return new ResponseEntity<>(exceptionsDto, HttpStatus.UNAUTHORIZED);
+    }
 }

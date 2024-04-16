@@ -6,15 +6,14 @@ import com.AlexandreLoiola.AccessManagement.model.RoleModel;
 import com.AlexandreLoiola.AccessManagement.model.UserModel;
 import com.AlexandreLoiola.AccessManagement.repository.UserRepository;
 import com.AlexandreLoiola.AccessManagement.rest.dto.UserDto;
-import com.AlexandreLoiola.AccessManagement.rest.form.AuthorizationForm;
-import com.AlexandreLoiola.AccessManagement.rest.form.RoleForm;
-import com.AlexandreLoiola.AccessManagement.rest.form.UserCreateForm;
-import com.AlexandreLoiola.AccessManagement.rest.form.UserUpdateForm;
+import com.AlexandreLoiola.AccessManagement.rest.form.*;
+import com.AlexandreLoiola.AccessManagement.service.exceptions.user.InvalidCredentials;
 import com.AlexandreLoiola.AccessManagement.service.exceptions.user.UserInsertException;
 import com.AlexandreLoiola.AccessManagement.service.exceptions.user.UserNotFoundException;
 import com.AlexandreLoiola.AccessManagement.service.exceptions.user.UserUpdateException;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -54,6 +53,22 @@ public class UserService {
         return userModel;
     }
 
+    public UserDto login(UserLoginForm userLoginForm) {
+        try {
+            userRepository.findByEmail(userLoginForm.getEmail()).orElseThrow(
+                    () -> new InvalidCredentials("Invalid login credentials")
+            );
+            UserModel userModel = findUserModelByEmail(userLoginForm.getEmail());
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            if (!(passwordEncoder.matches(userLoginForm.getPassword(), userModel.getPassword()))) {
+                throw new InvalidCredentials("Invalid login credentials");
+            }
+            return userMapper.INSTANCE.modelToDto(userModel);
+        } catch (InvalidCredentials err) {
+            throw new InvalidCredentials("Invalid login credentials");
+        }
+    }
+
     public Set<UserDto> getAllUserDto() {
         Set<UserModel> userModelSet = userRepository.findByIsActiveTrue();
         if (userModelSet.isEmpty()) {
@@ -76,6 +91,7 @@ public class UserService {
         }
         try {
             UserModel userModel = userMapper.INSTANCE.formToModel(userForm);
+            userModel.setPassword(new BCryptPasswordEncoder().encode(userForm.getPassword()));
             Date date = new Date();
             userModel.setCreatedAt(date);
             userModel.setUpdatedAt(date);
