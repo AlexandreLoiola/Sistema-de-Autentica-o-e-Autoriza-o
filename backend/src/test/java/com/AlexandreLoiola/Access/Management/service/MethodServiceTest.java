@@ -75,109 +75,91 @@ public class MethodServiceTest {
 
     @Test
     void shouldFindAllMethodsSuccessfully() {
-        // Given: Configuramos o repositório para retornar um conjunto de MethodModel quando o método findByIsActiveTrue for chamado.
+        // Given
         Set<MethodModel> methodModels = Collections.singleton(methodModel);
         when(methodRepository.findByIsActiveTrue()).thenReturn(methodModels);
-
-        // Criamos um conjunto de MethodDto esperado a partir dos MethodModel retornados.
         Set<MethodDto> expectedMethodDtos = new HashSet<>();
         for (MethodModel model : methodModels) {
             expectedMethodDtos.add(methodMapper.modelToDto(model));
         }
 
-        // When: Chamamos o método getAllMethodDto do serviço.
+        // When
         Set<MethodDto> serviceResponse = methodService.getAllMethodDto();
 
-        // Then: Verificamos se o conjunto de MethodDto retornado é igual ao conjunto esperado.
+        // Then
         assertEquals(expectedMethodDtos, serviceResponse);
-
-        // Verificamos se o método do repositório foi chamado conforme esperado.
         verify(methodRepository, times(1)).findByIsActiveTrue();
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldThrowMethodNotFoundExceptionWhenNoActiveMethods() {
-        // Given: Configuramos o repositório para retornar um conjunto vazio quando o método findByIsActiveTrue for chamado.
+        // Given
         when(methodRepository.findByIsActiveTrue()).thenReturn(Collections.emptySet());
 
-        // When & Then: Esperamos que uma exceção seja lançada quando tentamos obter todos os MethodDto e não há métodos ativos.
+        // When & Then
         assertThrows(MethodNotFoundException.class, () -> {
             methodService.getAllMethodDto();
         });
-
-        // Verificamos se o método do repositório foi chamado conforme esperado.
         verify(methodRepository, times(1)).findByIsActiveTrue();
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldFindMethodDtoSuccessfully() {
-        // Given: Configuramos o repositório para retornar um MethodModel quando o método findByDescriptionAndIsActiveTrue for chamado.
+        // Given
         when(methodRepository.findByDescriptionAndIsActiveTrue(methodForm.getDescription())).thenReturn(Optional.of(methodModel));
-
-        // Criamos um MethodDto esperado a partir do MethodModel retornado.
         MethodDto expectedDto = methodMapper.modelToDto(methodModel);
 
-        // When: Chamamos o método getMethodDtoByDescription do serviço.
+        // When
         MethodDto serviceResponse = methodService.getMethodDtoByDescription(methodForm.getDescription());
 
-        // Then: Verificamos se o MethodDto retornado é igual ao esperado.
+        // Then
         assertEquals(expectedDto, serviceResponse);
-
-        // Verificamos se o método do repositório foi chamado conforme esperado.
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(methodModel.getDescription());
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldFindMethodModelSuccessfully() {
-        // Given: Configuramos o repositório para retornar um MethodModel quando o método findByDescriptionAndIsActiveTrue for chamado.
+        // Given
         when(methodRepository.findByDescriptionAndIsActiveTrue(methodModel.getDescription())).thenReturn(Optional.of(methodModel));
 
-        // When: Chamamos o método findMethodModelByDescription do serviço.
+        // When
         MethodModel serviceResponse = methodService.findMethodModelByDescription(methodModel.getDescription());
 
-        // Then: Verificamos se o MethodModel retornado é igual ao esperado.
+        // Then
         assertEquals(methodModel, serviceResponse);
-
-        // Verificamos se o método do repositório foi chamado conforme esperado.
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(methodModel.getDescription());
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldThrowMethodNotFoundException() {
-        // Given: Configuramos o repositório para retornar vazio quando o método findByDescriptionAndIsActiveTrue for chamado.
+        // Given
         String description = "nonexistentDescription";
         when(methodRepository.findByDescriptionAndIsActiveTrue(description)).thenReturn(Optional.empty());
 
-        // When & Then: Esperamos que uma exceção seja lançada quando tentamos encontrar um MethodModel com uma descrição que não existe.
+        // When & Then
         assertThrows(MethodNotFoundException.class, () -> {
             methodService.findMethodModelByDescription(description);
         });
-
-        // Verificamos se o método do repositório foi chamado conforme esperado.
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(description);
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldInsertMethodSuccessfully() {
-        // Given: Configuramos o repositório para retornar vazio quando o método findByDescriptionAndIsActiveTrue for chamado e para salvar o MethodModel quando o método save for chamado.
+        // Given
         when(methodRepository.findByDescriptionAndIsActiveTrue(anyString())).thenReturn(Optional.empty());
         when(methodRepository.save(any(MethodModel.class))).thenReturn(methodModel);
-
-        // Criamos um MethodDto esperado a partir do MethodModel salvo.
         MethodDto expectedDto = methodMapper.modelToDto(methodModel);
 
-        // When: Chamamos o método insertMethod do serviço.
+        // When
         MethodDto serviceResponse = methodService.insertMethod(methodForm);
 
-        // Then: Verificamos se o MethodDto retornado é igual ao esperado.
+        // Then
         assertEquals(expectedDto, serviceResponse);
-
-        // Verificamos se os métodos do repositório foram chamados conforme esperado.
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(anyString());
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
@@ -186,31 +168,27 @@ public class MethodServiceTest {
 
     @Test
     void shouldThrowMethodInsertExceptionWhenMethodAlreadyExists() {
-        // Given: Configuramos o repositório para retornar um MethodModel quando o método findByDescriptionAndIsActiveTrue for chamado.
+        // Given
         when(methodRepository.findByDescriptionAndIsActiveTrue(methodForm.getDescription())).thenReturn(Optional.of(methodModel));
 
-        // When & Then: Esperamos que uma exceção seja lançada quando tentamos inserir um método que já existe.
+        // When & Then
         assertThrows(MethodInsertException.class, () -> {
             methodService.insertMethod(methodForm);
         });
-
-        // Verificamos se os métodos do repositório foram chamados conforme esperado.
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(methodForm.getDescription());
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldThrowMethodInsertExceptionWhenDataIntegrityViolationOccurs() {
-        // Given: Configuramos o repositório para retornar vazio quando o método findByDescriptionAndIsActiveTrue for chamado e para lançar uma exceção quando o método save for chamado.
+        // Given
         when(methodRepository.findByDescriptionAndIsActiveTrue(methodForm.getDescription())).thenReturn(Optional.empty());
         when(methodRepository.save(any(MethodModel.class))).thenThrow(new DataIntegrityViolationException(""));
 
-        // When & Then: Esperamos que uma exceção seja lançada quando ocorre uma violação de integridade de dados ao tentar inserir um método.
+        // When & Then
         assertThrows(MethodInsertException.class, () -> {
             methodService.insertMethod(methodForm);
         });
-
-        // Verificamos se os métodos do repositório foram chamados conforme esperado.
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(methodForm.getDescription());
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
@@ -218,21 +196,19 @@ public class MethodServiceTest {
 
     @Test
     void shouldUpdateMethodSuccessfully() {
-        // Given: Configuramos o repositório para retornar um MethodModel quando o método findByDescriptionAndIsActiveTrue for chamado e para salvar o MethodModel quando o método save for chamado.
+        // Given
         String description = "description";
         Date initialUpdatedAt = methodModel.getUpdatedAt();
         when(methodRepository.findByDescriptionAndIsActiveTrue(description)).thenReturn(Optional.of(methodModel));
         ArgumentCaptor<MethodModel> captor = ArgumentCaptor.forClass(MethodModel.class);
         when(methodRepository.save(captor.capture())).thenReturn(methodModel);
 
-        // When: Atualizamos o método.
+        // When
         methodService.updateMethod(description, methodUpdateForm);
 
-        // Then: Verificamos se o método foi atualizado com sucesso.
+        // Then
         MethodModel savedMethod = captor.getValue();
         assertTrue(savedMethod.getUpdatedAt().after(initialUpdatedAt));
-
-        // Verificamos se os métodos do repositório foram chamados conforme esperado.
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(description);
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
@@ -248,7 +224,6 @@ public class MethodServiceTest {
         assertThrows(MethodUpdateException.class, () -> {
             methodService.updateMethod(methodForm.getDescription(), methodUpdateForm);
         });
-
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(anyString());
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
@@ -290,5 +265,4 @@ public class MethodServiceTest {
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
     }
-
 }
