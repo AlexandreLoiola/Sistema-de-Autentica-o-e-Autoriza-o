@@ -52,6 +52,14 @@ public class RoleService {
         return roleModel;
     }
 
+    public Set<RoleModel> findAllRoleModels() {
+        Set<RoleModel> roleModelSet = roleRepository.findByIsActiveTrue();
+        if (roleModelSet.isEmpty()) {
+            throw new RoleNotFoundException("No active role was found");
+        }
+        return roleModelSet;
+    }
+
     public Set<RoleDto> getAllRoleDto() {
         Set<RoleModel> roleModelSet = roleRepository.findByIsActiveTrue();
         if (roleModelSet.isEmpty()) {
