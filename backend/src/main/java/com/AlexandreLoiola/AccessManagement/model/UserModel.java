@@ -15,9 +15,7 @@ import java.util.UUID;
 @Table(name="TB_USER")
 public class UserModel {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(columnDefinition="uuid")
+    @GeneratedValue
     private UUID id;
 
     @Column(name = "username", length = 100, nullable = false, unique = true)
@@ -37,8 +35,8 @@ public class UserModel {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "isActive", nullable = false)
-    private Boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
     @Version
     @Column(name = "version", nullable = false)
@@ -52,6 +50,11 @@ public class UserModel {
             inverseJoinColumns = @JoinColumn(name = "id_role")
     )
     private Set<RoleModel> roles = new HashSet<>();
+
+    public void setId(UUID id) {
+        this.id = UUID.fromString(id.toString());
+    }
+
 
     @Override
     public boolean equals(Object o) {

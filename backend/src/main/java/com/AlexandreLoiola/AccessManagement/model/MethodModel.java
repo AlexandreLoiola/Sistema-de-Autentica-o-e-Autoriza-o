@@ -1,11 +1,8 @@
 package com.AlexandreLoiola.AccessManagement.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
@@ -18,9 +15,7 @@ import java.util.UUID;
 @Table(name="TB_METHOD")
 public class MethodModel {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(columnDefinition="uuid")
+    @GeneratedValue
     private UUID id;
 
     @Column(name = "description", length = 100, nullable = false, unique = true)
@@ -34,8 +29,8 @@ public class MethodModel {
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
-    @Column(name = "isActive", nullable = false)
-    private Boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
     @Version
     @Column(name = "version", nullable = false)

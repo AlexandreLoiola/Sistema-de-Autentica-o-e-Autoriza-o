@@ -15,9 +15,9 @@ import java.util.UUID;
 public interface RoleRepository extends JpaRepository<RoleModel, UUID> {
 
     @Query(value = "SELECT a.description AS role_description, m.description AS authorization_description " +
-            "FROM TB_ROLE a " +
-            "JOIN TB_ROLE_AUTHORIZATION am ON a.id = am.id_role " +
-            "JOIN TB_AUTHORIZATION m ON am.id_authorization = m.id " +
+            "FROM tb_role a " +
+            "JOIN tb_role_authorization am ON a.id = am.id_role " +
+            "JOIN tb_authorization m ON am.id_authorization = m.id " +
             "WHERE a.description = :roleDescription", nativeQuery = true)
     Set<Object[]> findRoleWithAuthorizations(@Param("roleDescription") String roleDescription);
 

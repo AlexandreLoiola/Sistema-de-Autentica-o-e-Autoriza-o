@@ -12,9 +12,7 @@ import java.util.UUID;
 @Table(name = "TB_EMAIL_TEMPLATE")
 public class MailModel {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(columnDefinition="uuid")
+    @GeneratedValue
     private UUID id;
 
     @Column(name = "name", length = 100, nullable = false, unique = true)
@@ -34,10 +32,15 @@ public class MailModel {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "isActive", nullable = false)
-    private Boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
     @Version
     @Column(name = "version", nullable = false)
     private long version;
+
+    public void setId(UUID id) {
+        this.id = UUID.fromString(id.toString());
+    }
+
 }

@@ -13,12 +13,10 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table(name="TB_ROLE")
+@Table(name="tb_role")
 public class RoleModel {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(columnDefinition="uuid")
+    @GeneratedValue
     private UUID id;
 
     @Column(name = "description", length = 100, nullable = false, unique = true)
@@ -32,9 +30,8 @@ public class RoleModel {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "isActive", nullable = false)
-    private Boolean isActive;
-
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
     @Version
     @Column(name = "version", nullable = false)
     private long version;
@@ -42,7 +39,7 @@ public class RoleModel {
     @JsonManagedReference
     @ManyToMany
     @JoinTable(
-            name="TB_ROLE_AUTHORIZATION",
+            name="tb_role_authorization",
             joinColumns = {@JoinColumn(name = "id_role", referencedColumnName = "id")},
             inverseJoinColumns = @JoinColumn(name = "id_authorization")
     )
@@ -51,6 +48,11 @@ public class RoleModel {
     @JsonBackReference
     @ManyToMany(mappedBy = "roles")
     private Set<UserModel> users = new HashSet<>();
+
+    public void setId(UUID id) {
+        this.id = UUID.fromString(id.toString());
+    }
+
 
     @Override
     public boolean equals(Object o) {

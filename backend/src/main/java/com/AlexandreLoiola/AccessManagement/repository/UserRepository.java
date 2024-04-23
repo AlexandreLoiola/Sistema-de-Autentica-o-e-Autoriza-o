@@ -16,9 +16,9 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<UserModel, UUID> {
 
     @Query(value = "SELECT a.email AS user_email, m.description AS role_description " +
-            "FROM TB_USER a " +
-            "JOIN TB_USER_ROLE am ON a.id = am.id_user " +
-            "JOIN TB_ROLE m ON am.id_role = m.id " +
+            "FROM tb_user a " +
+            "JOIN tb_user_role am ON a.id = am.id_user " +
+            "JOIN tb_role m ON am.id_role = m.id " +
             "WHERE a.email = :userEmail", nativeQuery = true)
     Set<Object[]> findUserWithRoles(@Param("userEmail") String userEmail);
 

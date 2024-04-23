@@ -19,9 +19,9 @@ public interface AuthorizationRepository extends JpaRepository<AuthorizationMode
         Optional<AuthorizationModel> findByDescription(String description);
 
     @Query(value = "SELECT a.description AS authorization_description, m.description AS method_description " +
-            "FROM TB_AUTHORIZATION a " +
-            "JOIN TB_AUTHORIZATION_METHOD am ON a.id = am.id_authorization " +
-            "JOIN TB_METHOD m ON am.id_method = m.id " +
+            "FROM tb_authorization a " +
+            "JOIN tb_authorization_method am ON a.id = am.id_authorization " +
+            "JOIN tb_method m ON am.id_method = m.id " +
             "WHERE a.description = :authorizationDescription", nativeQuery = true)
     Set<Object[]> findAuthorizationWithMethods(@Param("authorizationDescription") String authorizationDescription);
 

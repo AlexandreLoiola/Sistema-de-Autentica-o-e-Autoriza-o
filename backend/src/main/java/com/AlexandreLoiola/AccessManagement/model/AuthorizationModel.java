@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+
 
 import java.util.Date;
 import java.util.HashSet;
@@ -15,12 +13,10 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table(name="TB_AUTHORIZATION")
+@Table(name="tb_authorization")
 public class AuthorizationModel {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(columnDefinition="uuid")
+    @GeneratedValue
     private UUID id;
 
     @Column(name = "description", length = 100, nullable = false, unique = true)
@@ -37,8 +33,8 @@ public class AuthorizationModel {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "isActive", nullable = false)
-    private Boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
     @Version
     @Column(name = "version", nullable = false)
@@ -47,7 +43,7 @@ public class AuthorizationModel {
     @ManyToMany
     @JsonManagedReference
     @JoinTable(
-            name="TB_AUTHORIZATION_METHOD",
+            name="tb_authorization_method",
             joinColumns = {@JoinColumn(name = "id_authorization", referencedColumnName = "id")},
             inverseJoinColumns = @JoinColumn(name = "id_method")
     )
