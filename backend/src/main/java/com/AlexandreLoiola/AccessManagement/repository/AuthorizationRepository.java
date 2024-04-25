@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Repository
 public interface AuthorizationRepository extends JpaRepository<AuthorizationModel, UUID> {
-        Optional<AuthorizationModel> findByDescription(String description);
+    Optional<AuthorizationModel> findByDescription(String description);
 
     @Query(value = "SELECT a.description AS authorization_description, m.description AS method_description " +
             "FROM tb_authorization a " +
@@ -26,7 +26,7 @@ public interface AuthorizationRepository extends JpaRepository<AuthorizationMode
     Set<Object[]> findAuthorizationWithMethods(@Param("authorizationDescription") String authorizationDescription);
 
     @Modifying
-    @Query(value = "DELETE FROM TB_AUTHORIZATION_METHOD WHERE id_authorization = :authorizationId", nativeQuery = true)
+    @Query(value = "DELETE FROM tb_authorization_method WHERE id_authorization = :authorizationId", nativeQuery = true)
     void deleteAuthorizationMethods(@Param("authorizationId") UUID authorizationId);
 
     Optional<AuthorizationModel> findByDescriptionAndIsActiveTrue(String description);

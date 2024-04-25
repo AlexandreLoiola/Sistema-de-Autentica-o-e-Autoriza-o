@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<UserModel, UUID> {
     Set<Object[]> findUserWithRoles(@Param("userEmail") String userEmail);
 
     @Modifying
-    @Query(value = "DELETE FROM TB_USER_ROLE WHERE id_user = :userId", nativeQuery = true)
+    @Query(value = "DELETE FROM tb_user_role WHERE id_user = :userId", nativeQuery = true)
     void deleteUserRole(@Param("userId") UUID userId);
 
     Optional<UserModel> findByEmail(String description);

@@ -22,7 +22,7 @@ public interface RoleRepository extends JpaRepository<RoleModel, UUID> {
     Set<Object[]> findRoleWithAuthorizations(@Param("roleDescription") String roleDescription);
 
     @Modifying
-    @Query(value = "DELETE FROM TB_ROLE_AUTHORIZATION WHERE id_role = :roleId", nativeQuery = true)
+    @Query(value = "DELETE FROM tb_role_authorization WHERE id_role = :roleId", nativeQuery = true)
     void deleteRoleAuthorization(@Param("roleId") UUID roleId);
 
     Optional<RoleModel> findByDescription(String description);
