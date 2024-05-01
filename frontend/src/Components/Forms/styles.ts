@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, ButtonProps } from "react-bootstrap";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 
 export const StyledFormGroup = styled(Form.Group)`
-  margin-bottom: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 0 !important; 
   width: 100%;
 `;
 
@@ -16,7 +17,7 @@ export const StyledFormLabel = styled(Form.Label)`
 export const StyledFormControl = styled(Form.Control)`
   font-size: 1rem;
   background-color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem .5rem;
   border: 1px solid lightgray;
   width: 100%;
 `;
@@ -85,10 +86,19 @@ export const StyledFormButton = styled(Button)`
   &:active {
     box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.6);
     transform: translateY(2px);
+    background-color: #467025 !important;
+    transition: font-size 3s;
+  }
+
+  &:focus-visible {
+    box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.6);
+    transform: translateY(2px);
+    background-color: #467025;
+    transition: font-size 3s;
   }
 `;
 
-export const ButtonSeePass = styled(Button)`
+export const ButtonSeePass = styled(Button)<ButtonProps>`
   display: flex;
   width: auto;
   height: 50px;
