@@ -13,6 +13,9 @@ import com.AlexandreLoiola.AccessManagement.service.exceptions.user.UserNotFound
 import com.AlexandreLoiola.AccessManagement.service.exceptions.user.UserUpdateException;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +24,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final RoleService roleService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, RoleService roleService) {
+    private final TokenService tokenService;
+
+    public UserService(UserRepository userRepository, UserMapper userMapper, RoleService roleService, TokenService tokenService) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.userMapper = userMapper;
+        this.tokenService = tokenService;
+    }
 
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return findUserModelByEmail(email);
     }
 
     public UserDto getUserDtoByEmail(String Email) {
@@ -39,6 +49,7 @@ public class UserService {
         return userMapper.INSTANCE.modelToDto(userModel);
     }
 
+    @Transactional
     public UserModel findUserModelByEmail(String email) {
         UserModel userModel = userRepository.findByEmailAndIsActiveTrue(email)
                 .orElseThrow(() -> new UserNotFoundException(
@@ -53,7 +64,7 @@ public class UserService {
         return userModel;
     }
 
-    public UserDto login(UserLoginForm userLoginForm) {
+    public String login(UserLoginForm userLoginForm) {
         try {
             userRepository.findByEmail(userLoginForm.getEmail()).orElseThrow(
                     () -> new InvalidCredentials("Invalid login credentials")
@@ -63,7 +74,8 @@ public class UserService {
             if (!(passwordEncoder.matches(userLoginForm.getPassword(), userModel.getPassword()))) {
                 throw new InvalidCredentials("Invalid login credentials");
             }
-            return userMapper.INSTANCE.modelToDto(userModel);
+            String token = tokenService.generateToken(userModel);
+            return token;
         } catch (InvalidCredentials err) {
             throw new InvalidCredentials("Invalid login credentials");
         }
@@ -85,17 +97,14 @@ public class UserService {
             );
         }
         Set<RoleModel> roleModels = new HashSet<>();
-        for (RoleForm roleForm : userForm.getRoles()) {
-            RoleModel roleModel = roleService.findRoleModelByDescription( roleForm.getDescription());
-            roleModels.add(roleModel);
-        }
+        roleModels.add(roleService.findRoleModelByDescription("Associado(a)"));
         try {
             UserModel userModel = userMapper.INSTANCE.formToModel(userForm);
             userModel.setPassword(new BCryptPasswordEncoder().encode(userForm.getPassword()));
             Date date = new Date();
             userModel.setCreatedAt(date);
             userModel.setUpdatedAt(date);
-            userModel.setIsActive(true);
+            userModel.setActive(true);
             userModel.setVersion(1);
             userModel.setRoles(roleModels);
             userRepository.save(userModel);
@@ -119,6 +128,7 @@ public class UserService {
             userModel.setEmail(userUpdateForm.getEmail());
             userModel.setUsername(userUpdateForm.getUsername());
             userModel.setUpdatedAt(new Date());
+            userModel.setRoles(roleModels);
             userRepository.save(userModel);
             return userMapper.INSTANCE.modelToDto(userModel);
         } catch (DataIntegrityViolationException err) {
@@ -130,7 +140,7 @@ public class UserService {
     public void deleteUser(String Email) {
         try {
             UserModel userModel = findUserModelByEmail(Email);
-            userModel.setIsActive(false);
+            userModel.setActive(false);
             userModel.setUpdatedAt(new Date());
             userRepository.save(userModel);
         } catch (DataIntegrityViolationException err) {

@@ -61,7 +61,7 @@ public class MethodService {
             Date date = new Date();
             methodModel.setCreatedAt(date);
             methodModel.setUpdatedAt(date);
-            methodModel.setIsActive(true);
+            methodModel.setActive(true);
             methodModel.setVersion(1);
             methodRepository.save(methodModel);
             return MethodMapper.INSTANCE.modelToDto(methodModel);
@@ -87,7 +87,7 @@ public class MethodService {
     public void deleteMethod(String description) {
         try {
             MethodModel methodModel = findMethodModelByDescription(description);
-            methodModel.setIsActive(false);
+            methodModel.setActive(false);
             methodModel.setUpdatedAt(new Date());
             methodRepository.save(methodModel);
         } catch (DataIntegrityViolationException err) {

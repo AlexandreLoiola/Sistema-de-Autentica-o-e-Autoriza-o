@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,6 +26,4 @@ public class UserCreateForm {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
             message = "The password must contain at least one lowercase letter, one uppercase letter, one digit, and one special symbol.")
     private String password;
-
-    private Set<RoleForm> roles;
 }

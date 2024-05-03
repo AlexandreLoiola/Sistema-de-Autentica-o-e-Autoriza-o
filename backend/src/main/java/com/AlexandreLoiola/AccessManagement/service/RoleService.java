@@ -26,7 +26,6 @@ public class RoleService {
     private final RoleRepository roleRepository;
     private final AuthorizationService authorizationService;
 
-
     public RoleService(RoleMapper roleMapper, RoleRepository roleRepository, AuthorizationService authorizationService) {
         this.roleRepository = roleRepository;
         this.roleMapper = roleMapper;
@@ -85,7 +84,7 @@ public class RoleService {
             Date date = new Date();
             roleModel.setCreatedAt(date);
             roleModel.setUpdatedAt(date);
-            roleModel.setIsActive(true);
+            roleModel.setActive(true);
             roleModel.setVersion(1);
             roleModel.setAuthorizations(authorizationModels);
             roleRepository.save(roleModel);
@@ -120,7 +119,7 @@ public class RoleService {
     public void deleteRole(String description) {
         try {
             RoleModel roleModel = findRoleModelByDescription(description);
-            roleModel.setIsActive(false);
+            roleModel.setActive(false);
             roleModel.setUpdatedAt(new Date());
             roleRepository.save(roleModel);
         } catch (DataIntegrityViolationException err) {

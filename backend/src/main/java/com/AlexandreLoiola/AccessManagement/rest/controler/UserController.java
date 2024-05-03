@@ -27,11 +27,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> userLogin(
+    public ResponseEntity<String> userLogin(
             @Valid @RequestBody UserLoginForm userForm
     ) {
-        UserDto userDto = userService.login(userForm);
-        return ResponseEntity.ok().body(userDto);
+        String token = userService.login(userForm);
+        return ResponseEntity.ok().body(token);
     }
 
     @GetMapping("/{description}")

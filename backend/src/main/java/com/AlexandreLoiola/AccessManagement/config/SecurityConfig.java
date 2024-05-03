@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Set;
 
@@ -18,29 +19,25 @@ import java.util.Set;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final RoleService roleService;
+    SecurityFilter securityFilter;
 
-    public SecurityConfig(RoleService roleService) {
-        this.roleService = roleService;
+    public SecurityConfig(SecurityFilter securityFilter) {
+        this.securityFilter = securityFilter;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/**").hasRole("Admin");
-                    Set<RoleModel> roles = roleService.findAllRoleModels();
-                    for (RoleModel role : roles) {
-                        for (AuthorizationModel authorization : role.getAuthorizations()) {
-                            for (MethodModel method : authorization.getMethods()) {
-                                authorize.requestMatchers(HttpMethod.valueOf(method.getDescription()), authorization.getPath()).hasRole(role.getDescription());
-                            }
-                        }
-                    }
+                    authorize.requestMatchers("/users/login").permitAll();
+                    authorize.requestMatchers(HttpMethod.POST, "/users").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/users").hasAuthority("Associado(a)");
+                    authorize.requestMatchers(HttpMethod.GET, "/methods");
                     authorize.anyRequest().authenticated();
                 })
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

@@ -83,7 +83,7 @@ public class AuthorizationService {
             Date date = new Date();
             authorizationModel.setCreatedAt(date);
             authorizationModel.setUpdatedAt(date);
-            authorizationModel.setIsActive(true);
+            authorizationModel.setActive(true);
             authorizationModel.setMethods(methodModels);
             authorizationModel.setVersion(1);
             authorizationRepository.save(authorizationModel);
@@ -122,7 +122,7 @@ public class AuthorizationService {
         authorizationModel.getMethods().clear();
         authorizationRepository.deleteAuthorizationMethods(authorizationModel.getId());
         try {
-            authorizationModel.setIsActive(false);
+            authorizationModel.setActive(false);
             authorizationModel.setUpdatedAt(new Date());
             authorizationRepository.save(authorizationModel);
         } catch (DataIntegrityViolationException err) {
