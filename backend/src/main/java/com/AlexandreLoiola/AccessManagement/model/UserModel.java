@@ -4,16 +4,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Data
-@Table(name="TB_USER")
-public class UserModel {
+@Table(name = "TB_USER")
+public class UserModel implements UserDetails {
     @Id
     @GeneratedValue
     private UUID id;
@@ -45,7 +44,7 @@ public class UserModel {
     @JsonManagedReference
     @ManyToMany
     @JoinTable(
-            name="TB_USER_ROLE",
+            name = "TB_USER_ROLE",
             joinColumns = {@JoinColumn(name = "id_user", referencedColumnName = "id")},
             inverseJoinColumns = @JoinColumn(name = "id_role")
     )
@@ -68,4 +67,41 @@ public class UserModel {
     public int hashCode() {
         return 31;
     }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.isActive;
+    }
 }
+
+

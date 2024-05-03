@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
-
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Entity
 @Data
 @Table(name="tb_authorization")
-public class AuthorizationModel {
+public class AuthorizationModel implements GrantedAuthority {
     @Id
     @GeneratedValue
     private UUID id;
@@ -64,5 +64,10 @@ public class AuthorizationModel {
     @Override
     public int hashCode() {
         return 31;
+    }
+
+    @Override
+    public String getAuthority() {
+        return this.path;
     }
 }

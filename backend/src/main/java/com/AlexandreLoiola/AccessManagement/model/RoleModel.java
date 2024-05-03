@@ -5,16 +5,18 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
 @Table(name="tb_role")
-public class RoleModel {
+public class RoleModel implements GrantedAuthority {
     @Id
     @GeneratedValue
     private UUID id;
@@ -49,11 +51,6 @@ public class RoleModel {
     @ManyToMany(mappedBy = "roles")
     private Set<UserModel> users = new HashSet<>();
 
-    public void setId(UUID id) {
-        this.id = UUID.fromString(id.toString());
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,5 +62,12 @@ public class RoleModel {
     @Override
     public int hashCode() {
         return 31;
+    }
+
+    @Override
+    public String getAuthority() {
+        return this.authorizations.stream()
+                .map(AuthorizationModel::getDescription)
+                .collect(Collectors.joining(", "));
     }
 }
