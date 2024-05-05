@@ -6,6 +6,7 @@ import com.AlexandreLoiola.AccessManagement.rest.form.UserCreateForm;
 import com.AlexandreLoiola.AccessManagement.rest.form.UserLoginForm;
 import com.AlexandreLoiola.AccessManagement.rest.form.UserUpdateForm;
 import com.AlexandreLoiola.AccessManagement.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> userLogin(
-            @Valid @RequestBody UserLoginForm userForm
+    public ResponseEntity<String> userLogin (
+            @Valid @RequestBody UserLoginForm userForm, HttpServletRequest request
     ) {
-        String token = userService.login(userForm);
+        String token = userService.login(userForm, request.getRemoteAddr());
         return ResponseEntity.ok().body(token);
     }
 

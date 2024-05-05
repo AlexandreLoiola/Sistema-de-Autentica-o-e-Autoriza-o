@@ -7,10 +7,7 @@ import com.AlexandreLoiola.AccessManagement.model.UserModel;
 import com.AlexandreLoiola.AccessManagement.repository.UserRepository;
 import com.AlexandreLoiola.AccessManagement.rest.dto.UserDto;
 import com.AlexandreLoiola.AccessManagement.rest.form.*;
-import com.AlexandreLoiola.AccessManagement.service.exceptions.user.InvalidCredentials;
-import com.AlexandreLoiola.AccessManagement.service.exceptions.user.UserInsertException;
-import com.AlexandreLoiola.AccessManagement.service.exceptions.user.UserNotFoundException;
-import com.AlexandreLoiola.AccessManagement.service.exceptions.user.UserUpdateException;
+import com.AlexandreLoiola.AccessManagement.service.exceptions.user.*;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,11 +29,14 @@ public class UserService implements UserDetailsService {
 
     private final TokenService tokenService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, RoleService roleService, TokenService tokenService) {
+    private final BlockLoginAttemptsService blockLoginAttemptsService;
+
+    public UserService(UserRepository userRepository, UserMapper userMapper, RoleService roleService, TokenService tokenService, BlockLoginAttemptsService blockLoginAttemptsService) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.userMapper = userMapper;
         this.tokenService = tokenService;
+        this.blockLoginAttemptsService = blockLoginAttemptsService;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
         return userModel;
     }
 
-    public String login(UserLoginForm userLoginForm) {
+    public String login(UserLoginForm userLoginForm, String ipAddress) {
         try {
             userRepository.findByEmail(userLoginForm.getEmail()).orElseThrow(
                     () -> new InvalidCredentials("Invalid login credentials")
@@ -72,7 +72,13 @@ public class UserService implements UserDetailsService {
             UserModel userModel = findUserModelByEmail(userLoginForm.getEmail());
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             if (!(passwordEncoder.matches(userLoginForm.getPassword(), userModel.getPassword()))) {
-                throw new InvalidCredentials("Invalid login credentials");
+                throw new InvalidCredentials(
+                        "Invalid login credentials",
+                        blockLoginAttemptsService,
+                        userLoginForm.getEmail(),
+                        userLoginForm.getPassword(),
+                        ipAddress
+                );
             }
             String token = tokenService.generateToken(userModel);
             return token;
@@ -121,7 +127,7 @@ public class UserService implements UserDetailsService {
         userRepository.deleteUserRole(userModel.getId());
         Set<RoleModel> roleModels = new HashSet<>();
         for (RoleForm roleForm : userUpdateForm.getRoles()) {
-            RoleModel roleModel = roleService.findRoleModelByDescription( roleForm.getDescription());
+            RoleModel roleModel = roleService.findRoleModelByDescription(roleForm.getDescription());
             roleModels.add(roleModel);
         }
         try {
