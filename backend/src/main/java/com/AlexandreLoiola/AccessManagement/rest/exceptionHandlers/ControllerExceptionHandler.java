@@ -1,4 +1,4 @@
-package com.AlexandreLoiola.AccessManagement.rest.controler.exceptionHandlers;
+package com.AlexandreLoiola.AccessManagement.rest.exceptionHandlers;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;

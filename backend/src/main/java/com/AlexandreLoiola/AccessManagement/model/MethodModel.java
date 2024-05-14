@@ -3,6 +3,7 @@ package com.AlexandreLoiola.AccessManagement.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Entity
 @Data
 @Table(name="TB_METHOD")
+@EqualsAndHashCode
 public class MethodModel {
     @Id
     @GeneratedValue
@@ -39,17 +41,4 @@ public class MethodModel {
     @JsonBackReference
     @ManyToMany(mappedBy = "methods")
     private Set<AuthorizationModel> authorizations = new HashSet<>();
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MethodModel)) return false;
-        MethodModel that = (MethodModel) o;
-        return id != null && id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
 }

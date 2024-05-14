@@ -3,6 +3,8 @@ package com.AlexandreLoiola.AccessManagement.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +14,7 @@ import java.util.*;
 @Entity
 @Data
 @Table(name = "TB_USER")
+@EqualsAndHashCode
 public class UserModel implements UserDetails {
     @Id
     @GeneratedValue
@@ -48,24 +51,12 @@ public class UserModel implements UserDetails {
             joinColumns = {@JoinColumn(name = "id_user", referencedColumnName = "id")},
             inverseJoinColumns = @JoinColumn(name = "id_role")
     )
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<RoleModel> roles = new HashSet<>();
 
     public void setId(UUID id) {
         this.id = UUID.fromString(id.toString());
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserModel)) return false;
-        UserModel that = (UserModel) o;
-        return id != null && id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
     }
 
     @Override
@@ -103,5 +94,3 @@ public class UserModel implements UserDetails {
         return this.isActive;
     }
 }
-
-

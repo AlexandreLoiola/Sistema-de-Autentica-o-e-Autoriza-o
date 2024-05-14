@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Date;
@@ -14,6 +16,7 @@ import java.util.UUID;
 @Entity
 @Data
 @Table(name="tb_authorization")
+@EqualsAndHashCode
 public class AuthorizationModel implements GrantedAuthority {
     @Id
     @GeneratedValue
@@ -47,24 +50,13 @@ public class AuthorizationModel implements GrantedAuthority {
             joinColumns = {@JoinColumn(name = "id_authorization", referencedColumnName = "id")},
             inverseJoinColumns = @JoinColumn(name = "id_method")
     )
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<MethodModel> methods = new HashSet<>();
 
     @JsonBackReference
     @ManyToMany(mappedBy = "authorizations")
     private Set<RoleModel> roles = new HashSet<>();
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AuthorizationModel)) return false;
-        AuthorizationModel that = (AuthorizationModel) o;
-        return id != null && id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
 
     @Override
     public String getAuthority() {
