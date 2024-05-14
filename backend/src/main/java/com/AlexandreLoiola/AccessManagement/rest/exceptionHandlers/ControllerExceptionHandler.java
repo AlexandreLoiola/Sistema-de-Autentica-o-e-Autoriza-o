@@ -1,4 +1,4 @@
-package com.AlexandreLoiola.AccessManagement.rest.controler.exceptions;
+package com.AlexandreLoiola.AccessManagement.rest.controler.exceptionHandlers;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +11,8 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
@@ -86,4 +88,17 @@ public class ControllerExceptionHandler {
                 request.getRequestURI());
         return new ResponseEntity<>(exceptionsDto, HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionsDto> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+        String errorMsg = ex.getMessage();
+        ExceptionsDto exceptionsDto = new ExceptionsDto(
+                System.currentTimeMillis(),
+                HttpStatus.FORBIDDEN.value(),
+                "Acesso negado",
+                errorMsg,
+                request.getRequestURI());
+        return new ResponseEntity<>(exceptionsDto, HttpStatus.FORBIDDEN);
+    }
+
 }
