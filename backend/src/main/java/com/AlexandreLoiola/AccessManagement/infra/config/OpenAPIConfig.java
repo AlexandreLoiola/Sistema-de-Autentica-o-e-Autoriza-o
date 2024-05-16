@@ -1,4 +1,4 @@
-package com.AlexandreLoiola.AccessManagement.config;
+package com.AlexandreLoiola.AccessManagement.infra.config;
 
 import java.util.List;
 
