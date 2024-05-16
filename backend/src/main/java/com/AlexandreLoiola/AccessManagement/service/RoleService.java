@@ -12,6 +12,7 @@ import com.AlexandreLoiola.AccessManagement.service.exceptions.role.RoleNotFound
 import com.AlexandreLoiola.AccessManagement.service.exceptions.role.RoleInsertException;
 import com.AlexandreLoiola.AccessManagement.service.exceptions.role.RoleUpdateException;
 import jakarta.transaction.Transactional;
+import org.hibernate.annotations.Fetch;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -51,8 +52,9 @@ public class RoleService {
         return roleModel;
     }
 
+    @Transactional
     public Set<RoleModel> findAllRoleModels() {
-        Set<RoleModel> roleModelSet = roleRepository.findByIsActiveTrue();
+        Set<RoleModel> roleModelSet = roleRepository.findByIsActiveTrueAndFetchAuthorizationsEagerly();
         if (roleModelSet.isEmpty()) {
             throw new RoleNotFoundException("No active role was found");
         }

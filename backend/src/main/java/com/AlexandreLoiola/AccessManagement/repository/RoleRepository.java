@@ -27,6 +27,9 @@ public interface RoleRepository extends JpaRepository<RoleModel, UUID> {
 
     Optional<RoleModel> findByDescription(String description);
     Optional<RoleModel> findByDescriptionAndIsActiveTrue(String description);
-    Set<RoleModel> findByIsActiveTrue();
 
+    @Query("SELECT r FROM RoleModel r JOIN FETCH r.authorizations a JOIN FETCH a.methods WHERE r.isActive = true")
+    Set<RoleModel> findByIsActiveTrueAndFetchAuthorizationsEagerly();
+
+    Set<RoleModel> findByIsActiveTrue();
 }
