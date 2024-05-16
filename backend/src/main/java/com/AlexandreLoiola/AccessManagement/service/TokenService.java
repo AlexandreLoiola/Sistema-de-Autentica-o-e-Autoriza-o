@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -45,8 +44,25 @@ public class TokenService {
             return "";
         }
     }
+    public String generatePasswordResetToken(UserModel userModel) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
+            String token = JWT.create()
+                    .withIssuer("password_reset")
+                    .withSubject(userModel.getEmail())
+                    .withExpiresAt(generatePasswordResetExpiresDate())
+                    .sign(algorithm);
+            return token;
+        } catch (JWTCreationException ex) {
+            throw new RuntimeException("Error while generating password reset token", ex);
+        }
+    }
 
     private Instant generateExpiresDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    }
+
+    private Instant generatePasswordResetExpiresDate() {
+        return LocalDateTime.now().plusMinutes(30).toInstant(ZoneOffset.of("-03:00"));
     }
 }
