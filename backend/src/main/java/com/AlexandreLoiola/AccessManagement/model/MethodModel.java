@@ -3,9 +3,7 @@ package com.AlexandreLoiola.AccessManagement.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
@@ -13,8 +11,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Data
 @Table(name="TB_METHOD")
 public class MethodModel {
     @Id
