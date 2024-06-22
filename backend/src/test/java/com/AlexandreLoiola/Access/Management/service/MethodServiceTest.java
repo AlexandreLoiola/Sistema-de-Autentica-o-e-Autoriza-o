@@ -26,9 +26,16 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 @ExtendWith(MockitoExtension.class)
 public class MethodServiceTest {
+
+    private static final UUID ID = UUID.randomUUID();
+    private static final String DESCRIPTION = "description";
+    private static final Date DATE = new Date();
+    public static final boolean IS_ACTIVE = true;
+    private static final Integer VERSION = 1;
 
     @InjectMocks
     private MethodService methodService;
@@ -53,29 +60,11 @@ public class MethodServiceTest {
 
     @BeforeEach
     public void setup() {
-        UUID id = UUID.randomUUID();
-        Date date = new Date();
-        methodModel = new MethodModel();
-        methodModel.setId(id);
-        methodModel.setDescription("description");
-        methodModel.setIsActive(true);
-        methodModel.setVersion(1);
-        methodModel.setCreatedAt(date);
-        methodModel.setUpdatedAt(date);
-
-        methodForm = new MethodForm();
-        methodForm.setDescription("description");
-
-        methodDto = new MethodDto();
-        methodDto.setDescription("description");
-
-        methodUpdateForm = new MethodUpdateForm();
-        methodUpdateForm.setDescription("description");
+        initializeTestObjects();
     }
 
     @Test
     void shouldFindAllMethodsSuccessfully() {
-        // Given
         Set<MethodModel> methodModels = Collections.singleton(methodModel);
         when(methodRepository.findByIsActiveTrue()).thenReturn(methodModels);
         Set<MethodDto> expectedMethodDtos = new HashSet<>();
@@ -83,10 +72,8 @@ public class MethodServiceTest {
             expectedMethodDtos.add(methodMapper.modelToDto(model));
         }
 
-        // When
         Set<MethodDto> serviceResponse = methodService.getAllMethodDto();
 
-        // Then
         assertEquals(expectedMethodDtos, serviceResponse);
         verify(methodRepository, times(1)).findByIsActiveTrue();
         verifyNoMoreInteractions(methodRepository);
@@ -94,10 +81,8 @@ public class MethodServiceTest {
 
     @Test
     void shouldThrowMethodNotFoundExceptionWhenNoActiveMethods() {
-        // Given
         when(methodRepository.findByIsActiveTrue()).thenReturn(Collections.emptySet());
 
-        // When & Then
         assertThrows(MethodNotFoundException.class, () -> {
             methodService.getAllMethodDto();
         });
@@ -107,58 +92,48 @@ public class MethodServiceTest {
 
     @Test
     void shouldFindMethodDtoSuccessfully() {
-        // Given
-        when(methodRepository.findByDescriptionAndIsActiveTrue(methodForm.getDescription())).thenReturn(Optional.of(methodModel));
+        when(methodRepository.findByDescriptionAndIsActiveTrue(anyString())).thenReturn(Optional.of(methodModel));
         MethodDto expectedDto = methodMapper.modelToDto(methodModel);
 
-        // When
-        MethodDto serviceResponse = methodService.getMethodDtoByDescription(methodForm.getDescription());
+        MethodDto serviceResponse = methodService.getMethodDtoByDescription(DESCRIPTION);
 
-        // Then
+        assertNotNull(serviceResponse);
         assertEquals(expectedDto, serviceResponse);
-        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(methodModel.getDescription());
+        assertEquals(DESCRIPTION, serviceResponse.getDescription());
+        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(DESCRIPTION);
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldFindMethodModelSuccessfully() {
-        // Given
-        when(methodRepository.findByDescriptionAndIsActiveTrue(methodModel.getDescription())).thenReturn(Optional.of(methodModel));
+        when(methodRepository.findByDescriptionAndIsActiveTrue(DESCRIPTION)).thenReturn(Optional.of(methodModel));
 
-        // When
-        MethodModel serviceResponse = methodService.findMethodModelByDescription(methodModel.getDescription());
+        MethodModel serviceResponse = methodService.findMethodModelByDescription(DESCRIPTION);
 
-        // Then
         assertEquals(methodModel, serviceResponse);
-        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(methodModel.getDescription());
+        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(DESCRIPTION);
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldThrowMethodNotFoundException() {
-        // Given
-        String description = "nonexistentDescription";
-        when(methodRepository.findByDescriptionAndIsActiveTrue(description)).thenReturn(Optional.empty());
+        when(methodRepository.findByDescriptionAndIsActiveTrue(DESCRIPTION)).thenReturn(Optional.empty());
 
-        // When & Then
         assertThrows(MethodNotFoundException.class, () -> {
-            methodService.findMethodModelByDescription(description);
+            methodService.findMethodModelByDescription(DESCRIPTION);
         });
-        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(description);
+        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(DESCRIPTION);
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldInsertMethodSuccessfully() {
-        // Given
         when(methodRepository.findByDescriptionAndIsActiveTrue(anyString())).thenReturn(Optional.empty());
         when(methodRepository.save(any(MethodModel.class))).thenReturn(methodModel);
         MethodDto expectedDto = methodMapper.modelToDto(methodModel);
 
-        // When
         MethodDto serviceResponse = methodService.insertMethod(methodForm);
 
-        // Then
         assertEquals(expectedDto, serviceResponse);
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(anyString());
         verify(methodRepository, times(1)).save(any(MethodModel.class));
@@ -168,61 +143,51 @@ public class MethodServiceTest {
 
     @Test
     void shouldThrowMethodInsertExceptionWhenMethodAlreadyExists() {
-        // Given
-        when(methodRepository.findByDescriptionAndIsActiveTrue(methodForm.getDescription())).thenReturn(Optional.of(methodModel));
+            when(methodRepository.findByDescriptionAndIsActiveTrue(DESCRIPTION)).thenReturn(Optional.of(methodModel));
 
-        // When & Then
         assertThrows(MethodInsertException.class, () -> {
             methodService.insertMethod(methodForm);
         });
-        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(methodForm.getDescription());
+        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(DESCRIPTION);
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldThrowMethodInsertExceptionWhenDataIntegrityViolationOccurs() {
-        // Given
-        when(methodRepository.findByDescriptionAndIsActiveTrue(methodForm.getDescription())).thenReturn(Optional.empty());
+        when(methodRepository.findByDescriptionAndIsActiveTrue(DESCRIPTION)).thenReturn(Optional.empty());
         when(methodRepository.save(any(MethodModel.class))).thenThrow(new DataIntegrityViolationException(""));
 
-        // When & Then
         assertThrows(MethodInsertException.class, () -> {
             methodService.insertMethod(methodForm);
         });
-        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(methodForm.getDescription());
+        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(DESCRIPTION);
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldUpdateMethodSuccessfully() {
-        // Given
-        String description = "description";
         Date initialUpdatedAt = methodModel.getUpdatedAt();
-        when(methodRepository.findByDescriptionAndIsActiveTrue(description)).thenReturn(Optional.of(methodModel));
+        when(methodRepository.findByDescriptionAndIsActiveTrue(DESCRIPTION)).thenReturn(Optional.of(methodModel));
         ArgumentCaptor<MethodModel> captor = ArgumentCaptor.forClass(MethodModel.class);
         when(methodRepository.save(captor.capture())).thenReturn(methodModel);
 
-        // When
-        methodService.updateMethod(description, methodUpdateForm);
+        methodService.updateMethod(DESCRIPTION, methodUpdateForm);
 
-        // Then
         MethodModel savedMethod = captor.getValue();
         assertTrue(savedMethod.getUpdatedAt().after(initialUpdatedAt));
-        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(description);
+        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(DESCRIPTION);
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldThrowMethodUpdateExceptionWhenUpdateMethodFails() {
-        // Given
         when(methodRepository.findByDescriptionAndIsActiveTrue(anyString())).thenReturn(Optional.of(methodModel));
         doThrow(DataIntegrityViolationException.class).when(methodRepository).save(any(MethodModel.class));
 
-        // When & Then
         assertThrows(MethodUpdateException.class, () -> {
-            methodService.updateMethod(methodForm.getDescription(), methodUpdateForm);
+            methodService.updateMethod(DESCRIPTION, methodUpdateForm);
         });
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(anyString());
         verify(methodRepository, times(1)).save(any(MethodModel.class));
@@ -231,38 +196,42 @@ public class MethodServiceTest {
 
     @Test
     void shouldDeleteMethodSuccessfully() {
-        // Given
-        String description = "description";
         Date initialUpdatedAt = methodModel.getUpdatedAt();
-        when(methodRepository.findByDescriptionAndIsActiveTrue(description)).thenReturn(Optional.of(methodModel));
+        when(methodRepository.findByDescriptionAndIsActiveTrue(DESCRIPTION)).thenReturn(Optional.of(methodModel));
         ArgumentCaptor<MethodModel> captor = ArgumentCaptor.forClass(MethodModel.class);
         when(methodRepository.save(captor.capture())).thenReturn(methodModel);
 
-        // When
-        methodService.deleteMethod(description);
+        methodService.deleteMethod(DESCRIPTION);
 
-        // Then
         MethodModel savedMethod = captor.getValue();
         assertTrue(savedMethod.getUpdatedAt().after(initialUpdatedAt));
         assertFalse(methodModel.getIsActive());
-        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(description);
+        verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(DESCRIPTION);
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
     }
 
     @Test
     void shouldThrowMethodUpdateExceptionWhenDeleteMethodFails() {
-        // Given
         when(methodRepository.findByDescriptionAndIsActiveTrue(anyString())).thenReturn(Optional.of(methodModel));
         doThrow(DataIntegrityViolationException.class).when(methodRepository).save(any(MethodModel.class));
 
-        // When & Then
         assertThrows(MethodUpdateException.class, () -> {
-            methodService.deleteMethod(methodForm.getDescription());
+            methodService.deleteMethod(DESCRIPTION);
         });
 
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(anyString());
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
+    }
+
+    private void initializeTestObjects() {
+        methodModel = new MethodModel(ID, DESCRIPTION, DATE, DATE, IS_ACTIVE, VERSION, null);
+
+        methodForm = new MethodForm(DESCRIPTION);
+
+        methodDto = new MethodDto(DESCRIPTION);
+
+        methodUpdateForm = new MethodUpdateForm(DESCRIPTION);
     }
 }
