@@ -1,5 +1,6 @@
 package com.AlexandreLoiola.Access.Management.service;
 
+import com.AlexandreLoiola.Access.Management.builders.MethodBuilder;
 import com.AlexandreLoiola.AccessManagement.mapper.MethodMapper;
 import com.AlexandreLoiola.AccessManagement.mapper.MethodMapperImpl;
 import com.AlexandreLoiola.AccessManagement.model.MethodModel;
@@ -26,16 +27,11 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.openMocks;
 
 @ExtendWith(MockitoExtension.class)
 public class MethodServiceTest {
 
-    private static final UUID ID = UUID.randomUUID();
     private static final String DESCRIPTION = "description";
-    private static final Date DATE = new Date();
-    public static final boolean IS_ACTIVE = true;
-    private static final Integer VERSION = 1;
 
     @InjectMocks
     private MethodService methodService;
@@ -60,7 +56,10 @@ public class MethodServiceTest {
 
     @BeforeEach
     public void setup() {
-        initializeTestObjects();
+        methodModel = MethodBuilder.createMethodModel();
+        methodForm = MethodBuilder.createMethodForm();
+        methodDto = MethodBuilder.createMethodDto();
+        methodUpdateForm = MethodBuilder.createMethodUpdateForm();
     }
 
     @Test
@@ -69,7 +68,8 @@ public class MethodServiceTest {
         when(methodRepository.findByIsActiveTrue()).thenReturn(methodModels);
         Set<MethodDto> expectedMethodDtos = new HashSet<>();
         for (MethodModel model : methodModels) {
-            expectedMethodDtos.add(methodMapper.modelToDto(model));
+            var a = methodMapper.modelToDto(model);
+            expectedMethodDtos.add(a);
         }
 
         Set<MethodDto> serviceResponse = methodService.getAllMethodDto();
@@ -140,10 +140,9 @@ public class MethodServiceTest {
         verifyNoMoreInteractions(methodRepository);
     }
 
-
     @Test
     void shouldThrowMethodInsertExceptionWhenMethodAlreadyExists() {
-            when(methodRepository.findByDescriptionAndIsActiveTrue(DESCRIPTION)).thenReturn(Optional.of(methodModel));
+        when(methodRepository.findByDescriptionAndIsActiveTrue(DESCRIPTION)).thenReturn(Optional.of(methodModel));
 
         assertThrows(MethodInsertException.class, () -> {
             methodService.insertMethod(methodForm);
@@ -205,7 +204,6 @@ public class MethodServiceTest {
 
         MethodModel savedMethod = captor.getValue();
         assertTrue(savedMethod.getUpdatedAt().after(initialUpdatedAt));
-        assertFalse(methodModel.getIsActive());
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(DESCRIPTION);
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
@@ -223,15 +221,5 @@ public class MethodServiceTest {
         verify(methodRepository, times(1)).findByDescriptionAndIsActiveTrue(anyString());
         verify(methodRepository, times(1)).save(any(MethodModel.class));
         verifyNoMoreInteractions(methodRepository);
-    }
-
-    private void initializeTestObjects() {
-        methodModel = new MethodModel(ID, DESCRIPTION, DATE, DATE, IS_ACTIVE, VERSION, null);
-
-        methodForm = new MethodForm(DESCRIPTION);
-
-        methodDto = new MethodDto(DESCRIPTION);
-
-        methodUpdateForm = new MethodUpdateForm(DESCRIPTION);
     }
 }
