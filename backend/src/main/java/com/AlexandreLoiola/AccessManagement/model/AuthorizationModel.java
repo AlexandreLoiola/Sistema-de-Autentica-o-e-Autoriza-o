@@ -3,9 +3,7 @@ package com.AlexandreLoiola.AccessManagement.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Date;
@@ -13,8 +11,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Data
 @Table(name="tb_authorization")
 @EqualsAndHashCode
 public class AuthorizationModel implements GrantedAuthority {
