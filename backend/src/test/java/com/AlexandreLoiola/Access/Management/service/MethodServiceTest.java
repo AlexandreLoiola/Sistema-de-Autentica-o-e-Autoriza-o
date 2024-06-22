@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class MethodServiceTest {
 
-    private static final String DESCRIPTION = "description";
+    private static final String DESCRIPTION = "method_description";
 
     @InjectMocks
     private MethodService methodService;
