@@ -2,10 +2,8 @@ package com.AlexandreLoiola.AccessManagement.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Data;
+import lombok.*;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -17,8 +15,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Data
 @Table(name="tb_role")
 @EqualsAndHashCode
 public class RoleModel implements GrantedAuthority {
