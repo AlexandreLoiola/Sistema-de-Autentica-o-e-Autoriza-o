@@ -16,8 +16,7 @@ public class MethodBuilder {
     private static final Date DEFAULT_DATE = new Date();
     private static final boolean DEFAULT_IS_ACTIVE = true;
     private static final Integer DEFAULT_VERSION = 1;
-    private static final Set<AuthorizationModel> DEFAULT_AUTHORIZATIONMODEL = AuthorizationBuilder.createAuthorizationModelSet(5);
-    private static final Set<AuthorizationForm> DEFAULT_AUTHORIZATIONFORM = AuthorizationBuilder.createAuthorizationFormSet(5);
+    private static final Set<AuthorizationModel> DEFAULT_AUTHORIZATIONMODEL = new HashSet<>();
 
 
     public static MethodModel createMethodModel() {
@@ -60,7 +59,7 @@ public class MethodBuilder {
             Date date = new Date();
             boolean isActive = true;
             Integer version = 1;
-            Set<AuthorizationModel> authorizations = AuthorizationBuilder.createAuthorizationModelSet(5);
+            Set<AuthorizationModel> authorizations = null;
             methodModels.add(new MethodModel(id, description, date, date, isActive, version, authorizations));
         }
         return methodModels;

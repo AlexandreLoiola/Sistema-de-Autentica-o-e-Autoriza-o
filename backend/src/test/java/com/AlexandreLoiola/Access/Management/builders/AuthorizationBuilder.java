@@ -23,7 +23,7 @@ public class AuthorizationBuilder {
     private static final boolean DEFAULT_IS_ACTIVE = true;
     private static final Integer DEFAULT_VERSION = 1;
     private static Set<MethodModel> DEFAULT_METHODSMODEL = MethodBuilder.createMethodModelSet(5);
-    private static Set<RoleModel> DEFAULT_ROLESMODEL = null;
+    private static Set<RoleModel> DEFAULT_ROLESMODEL = new HashSet<>();
     private static Set<MethodForm> DEFAULT_METHODSFORM = MethodBuilder.createMethodFormSet(5);
     private static Set<MethodDto> DEFAULT_METHODSDTO = MethodBuilder.createMethodDtoSet(5);
 
