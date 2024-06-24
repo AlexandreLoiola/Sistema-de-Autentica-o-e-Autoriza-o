@@ -16,6 +16,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthorizationService {
@@ -36,47 +37,26 @@ public class AuthorizationService {
     }
 
     public AuthorizationModel findAuthorizationModelByDescription(String description) {
-        AuthorizationModel authorizationModel = authorizationRepository.findByDescriptionAndIsActiveTrue(description)
+        return authorizationRepository.findByDescriptionAndFetchMethods(description)
                 .orElseThrow(() -> new AuthorizationNotFoundException(
-                        String.format("The authorization ‘%s’ was not found", description)
+                        String.format("The authorization '%s' was not found", description)
                 ));
-        Set<Object[]> results = authorizationRepository.findAuthorizationWithMethods(description);
-        for (Object[] result : results) {
-            String methodDescription = (String) result[1];
-            MethodModel methodModel = methodService.findMethodModelByDescription(methodDescription);
-            authorizationModel.getMethods().add(methodModel);
-        }
-        return authorizationModel;
     }
 
     public Set<AuthorizationDto> getAllAuthorizationDto() {
-        Set<AuthorizationModel> authorizationModelSet = authorizationRepository.findByIsActiveTrue();
+        Set<AuthorizationModel> authorizationModelSet = authorizationRepository.findByIsActiveTrueAndFetchMethodsEagerly();
         if (authorizationModelSet.isEmpty()) {
             throw new AuthorizationNotFoundException("No active authorization was found");
-        }
-        for (AuthorizationModel authorizationModel : authorizationModelSet) {
-            Set<Object[]> results = authorizationRepository.findAuthorizationWithMethods(authorizationModel.getDescription());
-            for (Object[] result : results) {
-                String methodDescription = (String) result[1];
-                MethodModel methodModel = new MethodModel();
-                methodModel.setDescription(methodDescription);
-                authorizationModel.getMethods().add(methodModel);
-            }
         }
         return AuthorizationMapper.INSTANCE.setModelToSetDto(authorizationModelSet);
     }
 
     @Transactional
     public AuthorizationDto insertAuthorization(AuthorizationForm authorizationForm) {
-        if (authorizationRepository.findByDescription(authorizationForm.getDescription()).isPresent()) {
-            throw new AuthorizationInsertException(
-                    String.format("The authorization ‘%s’ is already registered", authorizationForm.getDescription())
-            );
-        }
-        Set<MethodModel> methodModels = new HashSet<>();
-        for (MethodForm methodForm : authorizationForm.getMethods()) {
-            MethodModel methodModel = methodService.findMethodModelByDescription(methodForm.getDescription());
-            methodModels.add(methodModel);
+        try {
+            findAuthorizationModelByDescription(authorizationForm.getDescription());
+            throw new AuthorizationInsertException(String.format("Failed to register the authorization ‘%s’. Check if the data is correct", authorizationForm.getDescription()));
+        } catch (AuthorizationNotFoundException err) {
         }
         try {
             AuthorizationModel authorizationModel = AuthorizationMapper.INSTANCE.formToModel(authorizationForm);
@@ -84,7 +64,6 @@ public class AuthorizationService {
             authorizationModel.setCreatedAt(date);
             authorizationModel.setUpdatedAt(date);
             authorizationModel.setActive(true);
-            authorizationModel.setMethods(methodModels);
             authorizationModel.setVersion(1);
             authorizationRepository.save(authorizationModel);
             return AuthorizationMapper.INSTANCE.modelToDto(authorizationModel);
@@ -93,17 +72,16 @@ public class AuthorizationService {
         }
     }
 
-
     @Transactional
     public AuthorizationDto updateAuthorization(String description, AuthorizationUpdateForm authorizationUpdateForm) {
         AuthorizationModel authorizationModel = findAuthorizationModelByDescription(description);
         authorizationModel.getMethods().clear();
         authorizationRepository.deleteAuthorizationMethods(authorizationModel.getId());
-        Set<MethodModel> methodModels = new HashSet<>() ;
-        for (MethodForm methodForm : authorizationUpdateForm.getMethods()) {
-            MethodModel methodModel = methodService.findMethodModelByDescription(methodForm.getDescription());
-            methodModels.add(methodModel);
-        }
+
+        Set<MethodModel> methodModels = authorizationUpdateForm.getMethods().stream()
+                .map(methodForm -> methodService.findMethodModelByDescription(methodForm.getDescription()))
+                .collect(Collectors.toSet());
+
         try {
             authorizationModel.setDescription(authorizationUpdateForm.getDescription());
             authorizationModel.setPath(authorizationUpdateForm.getPath());
@@ -129,4 +107,6 @@ public class AuthorizationService {
             throw new AuthorizationUpdateException(String.format("Failed to update the authorization ‘%s’. Check if the data is correct", description));
         }
     }
+
+
 }
