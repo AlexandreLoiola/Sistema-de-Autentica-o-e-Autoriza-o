@@ -12,7 +12,6 @@ import com.AlexandreLoiola.AccessManagement.service.exceptions.role.RoleNotFound
 import com.AlexandreLoiola.AccessManagement.service.exceptions.role.RoleInsertException;
 import com.AlexandreLoiola.AccessManagement.service.exceptions.role.RoleUpdateException;
 import jakarta.transaction.Transactional;
-import org.hibernate.annotations.Fetch;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -39,17 +38,10 @@ public class RoleService {
     }
 
     public RoleModel findRoleModelByDescription(String description) {
-        RoleModel roleModel = roleRepository.findByDescriptionAndIsActiveTrue(description)
+        return roleRepository.findByDescriptionAndFetchAuthorizations(description)
                 .orElseThrow(() -> new RoleNotFoundException(
                         String.format("The role ‘%s’ was not found", description)
                 ));
-        Set<Object[]> results = roleRepository.findRoleWithAuthorizations(description);
-        for (Object[] result : results) {
-            String authorizationDescription = (String) result[1];
-            AuthorizationModel authorizationModel = authorizationService.findAuthorizationModelByDescription(authorizationDescription);
-            roleModel.getAuthorizations().add(authorizationModel);
-        }
-        return roleModel;
     }
 
     @Transactional
@@ -62,7 +54,7 @@ public class RoleService {
     }
 
     public Set<RoleDto> getAllRoleDto() {
-        Set<RoleModel> roleModelSet = roleRepository.findByIsActiveTrue();
+        Set<RoleModel> roleModelSet = roleRepository.findByIsActiveTrueAndFetchAuthorizationsEagerly();
         if (roleModelSet.isEmpty()) {
             throw new RoleNotFoundException("No active role was found");
         }
@@ -71,15 +63,11 @@ public class RoleService {
 
     @Transactional
     public RoleDto insertRole(RoleForm roleForm) {
-        if (roleRepository.findByDescription(roleForm.getDescription()).isPresent()) {
-            throw new RoleInsertException(
-                    String.format("The role ‘%s’ is already registered", roleForm.getDescription())
+        try {
+            findRoleModelByDescription(roleForm.getDescription());
+            throw new RoleInsertException(String.format("The role ‘%s’ is already registered", roleForm.getDescription())
             );
-        }
-        Set<AuthorizationModel> authorizationModels = new HashSet<>();
-        for (AuthorizationForm authorizationForm : roleForm.getAuthorizations()) {
-            AuthorizationModel authorizationModel = authorizationService.findAuthorizationModelByDescription(authorizationForm.getDescription());
-            authorizationModels.add(authorizationModel);
+        } catch (RoleNotFoundException err) {
         }
         try {
             RoleModel roleModel = RoleMapper.INSTANCE.formToModel(roleForm);
@@ -88,7 +76,6 @@ public class RoleService {
             roleModel.setUpdatedAt(date);
             roleModel.setActive(true);
             roleModel.setVersion(1);
-            roleModel.setAuthorizations(authorizationModels);
             roleRepository.save(roleModel);
             return RoleMapper.INSTANCE.modelToDto(roleModel);
         } catch (DataIntegrityViolationException err) {
@@ -119,8 +106,10 @@ public class RoleService {
 
     @Transactional
     public void deleteRole(String description) {
+        RoleModel roleModel = findRoleModelByDescription(description);
+        roleModel.getAuthorizations().clear();
+        roleRepository.deleteRoleAuthorization(roleModel.getId());
         try {
-            RoleModel roleModel = findRoleModelByDescription(description);
             roleModel.setActive(false);
             roleModel.setUpdatedAt(new Date());
             roleRepository.save(roleModel);
