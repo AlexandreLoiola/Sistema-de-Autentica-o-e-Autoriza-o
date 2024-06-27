@@ -1,6 +1,5 @@
 package com.AlexandreLoiola.AccessManagement.repository;
 
-import com.AlexandreLoiola.AccessManagement.model.RoleModel;
 import com.AlexandreLoiola.AccessManagement.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,12 +14,18 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, UUID> {
 
-    @Query(value = "SELECT a.email AS user_email, m.description AS role_description " +
-            "FROM tb_user a " +
-            "JOIN tb_user_role am ON a.id = am.id_user " +
-            "JOIN tb_role m ON am.id_role = m.id " +
-            "WHERE a.email = :userEmail", nativeQuery = true)
-    Set<Object[]> findUserWithRoles(@Param("userEmail") String userEmail);
+//    @Query(value = "SELECT a.email AS user_email, m.description AS role_description " +
+//            "FROM tb_user a " +
+//            "JOIN tb_user_role am ON a.id = am.id_user " +
+//            "JOIN tb_role m ON am.id_role = m.id " +
+//            "WHERE a.email = :userEmail", nativeQuery = true)
+//    Set<Object[]> findUserWithRoles(@Param("userEmail") String userEmail);
+
+    @Query("SELECT DISTINCT u FROM UserModel u LEFT JOIN FETCH u.roles r WHERE u.email = :email AND u.isActive = true")
+    Optional<UserModel> findByEmailAndFetchRoles(@Param("email") String email);
+
+    @Query("SELECT u FROM UserModel u JOIN FETCH u.roles r WHERE u.isActive = true")
+    Set<UserModel> findByIsActiveTrueAndFetchRolesEagerly();
 
     @Modifying
     @Query(value = "DELETE FROM tb_user_role WHERE id_user = :userId", nativeQuery = true)
