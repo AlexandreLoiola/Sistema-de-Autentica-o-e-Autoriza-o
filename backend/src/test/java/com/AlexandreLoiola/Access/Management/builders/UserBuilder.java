@@ -23,9 +23,9 @@ public class UserBuilder {
     private static final Date DEFAULT_UPDATED_AT = new Date();
     private static final boolean DEFAULT_IS_ACTIVE = true;
     private static final long DEFAULT_VERSION = 1L;
-    private static Set<RoleModel> DEFAULT_ROLESMODEL = RoleBuilder.createRoleModelSet(2);
-    private static Set<RoleDto> DEFAULT_ROLESDTO = RoleBuilder.createRoleDtoSet(2);
-    private static Set<RoleForm> DEFAULT_ROLESFORM = RoleBuilder.createRoleFormSet(2);
+    private static Set<RoleModel> DEFAULT_ROLESMODEL = RoleBuilder.createRoleModelSet(5);
+    private static Set<RoleDto> DEFAULT_ROLESDTO = RoleBuilder.createRoleDtoSet(5);
+    private static Set<RoleForm> DEFAULT_ROLESFORM = RoleBuilder.createRoleFormSet(5);
 
     public static UserModel createUserModel() {
         return new UserModel(DEFAULT_ID, DEFAULT_USERNAME, DEFAULT_EMAIL, DEFAULT_PASSWORD, DEFAULT_CREATED_AT, DEFAULT_UPDATED_AT, DEFAULT_IS_ACTIVE, DEFAULT_VERSION, DEFAULT_ROLESMODEL);
